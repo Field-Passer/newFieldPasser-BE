@@ -8,6 +8,13 @@ jar {
 	enabled = false
 }
 
+bootJar{
+	archivesBaseName = 'app'
+	archiveFileName = 'app.jar'
+	archiveVersion = "0.0.0"
+}
+
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
