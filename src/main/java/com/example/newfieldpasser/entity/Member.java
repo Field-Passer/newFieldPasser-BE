@@ -1,5 +1,7 @@
 package com.example.newfieldpasser.entity;
 
+import com.example.newfieldpasser.dto.AuthDTO;
+import com.example.newfieldpasser.parameter.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,15 +35,15 @@ public class Member {
     @Column(name = "member_phone")
     private String memberPhone;
 
-    @Column(name = "member_privilege")
-    private Boolean memberPrivilege;
-
     @Column(name = "member_delete")
     private Boolean memberDelete;
 
     @CreationTimestamp
     @Column(name = "SIGNUP_DATE", nullable = false)
     private LocalDateTime signUpDate;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @OneToMany(mappedBy = "member")
     private List<Board> boardList;
@@ -57,4 +59,19 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<WishBoard> wishBoardList;
+
+    // == 생성 메서드 == //
+    public static Member registerUser(AuthDTO.SignupDto signupDto) {
+        Member member = new Member();
+
+        member.memberId = signupDto.getMemberId();
+        member.password = signupDto.getPassword();
+        member.memberName = signupDto.getMemberName();
+        member.memberNickName = signupDto.getMemberNickName();
+        member.memberPhone = signupDto.getMemberPhone();
+        member.memberDelete = false;
+        member.role = Role.USER;
+
+        return member;
+    }
 }
