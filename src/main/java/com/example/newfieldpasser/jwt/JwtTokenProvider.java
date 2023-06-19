@@ -29,7 +29,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     private static final String AUTHORITIES_KEY = "role";
     private static final String ID_KEY = "id";
-    private static final String url = "https://localhost:8080";
+    private static final String url = "http://54.180.166.0:8080";
 
     private final String secretKey;
     private static Key signingKey;
@@ -125,7 +125,8 @@ public class JwtTokenProvider implements InitializingBean {
      */
     public boolean validateRefreshToken(String refreshToken) {
         try {
-            if (redisService.getValues(refreshToken).equals("delete")) { // 회원 탈퇴했을 경우
+            if (redisService.getValues(refreshToken) != null // NPE 방지
+                    && redisService.getValues(refreshToken).equals("delete")) { // 회원 탈퇴했을 경우
                 return false;
             }
             Jwts.parserBuilder()

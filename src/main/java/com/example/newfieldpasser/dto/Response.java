@@ -2,6 +2,7 @@ package com.example.newfieldpasser.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,33 @@ public class Response<T> {
         return ResponseEntity.ok(body);
     }
 
+    public ResponseEntity<?> loginSuccess(Object data, String msg, String RT, String AT){
+        Body body = Body.builder()
+                .state(HttpStatus.OK.value())
+                .result("SUCCESS")
+                .message(msg)
+                .data(data)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, RT)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + AT)
+                .body(body);
+    }
+
+    public ResponseEntity<?> logoutSuccess(String msg, String RT){
+        Body body = Body.builder()
+                .state(HttpStatus.OK.value())
+                .result("SUCCESS")
+                .message(msg)
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, RT)
+                .body(body);
+    }
+
     // Return Type : state & msg
     public ResponseEntity<?> success(String msg) {
         return success(null, msg, HttpStatus.OK);
@@ -68,6 +96,16 @@ public class Response<T> {
                 .data(data)
                 .build();
         return ResponseEntity.internalServerError().body(body);
+    }
+
+    public ResponseEntity<?> reissueFail(String msg, HttpStatus status, String RT) {
+        Body body = Body.builder()
+                .state(status.value())
+                .result("FAIL")
+                .message(msg)
+                .data(null)
+                .build();
+        return ResponseEntity.internalServerError().header(HttpHeaders.SET_COOKIE, RT).body(body);
     }
 
     // Return Type : state & msg
