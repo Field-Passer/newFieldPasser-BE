@@ -29,7 +29,7 @@ public class JwtTokenProvider implements InitializingBean {
 
     private static final String AUTHORITIES_KEY = "role";
     private static final String ID_KEY = "id";
-    private static final String url = "http://54.180.166.0:8080";
+    private static final String url = "https://field-passer.store";
 
     private final String secretKey;
     private static Key signingKey;
