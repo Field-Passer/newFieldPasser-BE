@@ -1,6 +1,7 @@
 package com.example.newfieldpasser.service;
 
 import com.example.newfieldpasser.dto.AuthDTO;
+import com.example.newfieldpasser.dto.MemberInfo;
 import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.member.ErrorCode;
@@ -42,6 +43,21 @@ public class MemberService {
         } catch(MemberException e){
             e.printStackTrace();
             throw new MemberException(ErrorCode.SIGNUP_FAILED);
+        }
+    }
+
+    /*
+    회원정보 조회
+    */
+    public ResponseEntity<?> selectMember(AuthDTO.LoginDto loginDto){
+        try{
+
+            MemberInfo memberinfo = memberRepository.findByMemberId(loginDto.getMemberId()).
+                    map(member -> new MemberInfo(member)).get();
+            return response.success(memberinfo,"회원 정보를 성공적으로 불러왔습니다.");
+        }catch (MemberException e){
+            e.printStackTrace();
+            return response.fail("회원정보를 불러오지 못 했습니다.");
         }
     }
 }
