@@ -92,4 +92,18 @@ public class Board {
         this.viewCount = this.viewCount == null ? 0 : this.viewCount;
         this.wishCount = this.wishCount == null ? 0 : this.wishCount;
     }
+
+    public void updatePost(Category category, District district, String imageUrl,
+                           String title, String content, LocalDateTime startTime,
+                           LocalDateTime endTime, TransactionStatus transactionStatus, int price) {
+        this.category = category;
+        this.district = district;
+        this.imageUrl = imageUrl;
+        this.title = title;
+        this.content = content;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.transactionStatus = transactionStatus;
+        this.price = price;
+    }
 }

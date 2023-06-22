@@ -35,4 +35,16 @@ public class BoardController {
 
         return boardService.boardInquiryDetail(boardId);
     }
+
+    /*
+    게시글 수정
+     */
+    @PutMapping("/board/edit/{boardId}")
+    public ResponseEntity<?> editBoard(@PathVariable long boardId,
+                                       @RequestParam("file") MultipartFile file,
+                                       BoardDTO.boardReqDTO boardReqDTO) {
+
+        return boardService.editBoard(boardId,file,boardReqDTO);
+    }
+
 }
