@@ -7,6 +7,8 @@ import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Category;
 import com.example.newfieldpasser.entity.District;
 import com.example.newfieldpasser.entity.Member;
+import com.example.newfieldpasser.exception.board.BoardException;
+import com.example.newfieldpasser.exception.board.ErrorCode;
 import com.example.newfieldpasser.repository.BoardRepository;
 import com.example.newfieldpasser.repository.CategoryRepository;
 import com.example.newfieldpasser.repository.DistrictRepository;
@@ -39,6 +41,9 @@ public class BoardService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
+    /*
+    게시글 등록
+     */
     @Transactional
     public ResponseEntity<?> registerBoard(MultipartFile file, Authentication authentication, BoardDTO.boardReqDTO boardReqDTO) {
         try {
@@ -77,4 +82,29 @@ public class BoardService {
 
         return amazonS3.getUrl(bucket, fullName).toString();
     }
+
+    /*
+    게시글 조회 시 조회 수 카운트
+     */
+    @Transactional
+    public void updateViewCount(long boardId) {
+        boardRepository.updateViewCount(boardId);
+    }
+
+    /*
+    게시글 상세조회
+     */
+    public ResponseEntity<?> boardInquiryDetail(long boardId) {
+        try {
+            BoardDTO.boardResDTO result = boardRepository.findByBoardId(boardId).map(BoardDTO.boardResDTO::new).get();
+
+            return response.success(result, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 상세조회 실패!");
+            e.printStackTrace();
+            throw new BoardException(ErrorCode.BOARD_INQUIRY_DETAIL_FAIL);
+        }
+    }
+
 }
