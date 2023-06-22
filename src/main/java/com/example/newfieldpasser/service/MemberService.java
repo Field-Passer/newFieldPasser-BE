@@ -65,4 +65,24 @@ public class MemberService {
             return response.fail("회원정보를 불러오지 못 했습니다.");
         }
     }
+
+    /*
+    회원정보 수정
+    */
+    public ResponseEntity<?> updateMember(Authentication authentication,MypageDTO.UpdateDTO updateDTO){
+        try{
+            Member member = memberRepository.findByMemberId(authentication.getName()).get();
+
+            member.updateMember(updateDTO.getMemberId(),updateDTO.getMemberName(),
+                    updateDTO.getMemberNickName(),updateDTO.getMemberPhone());
+
+            MypageDTO.UpdateDTO memberUpdate = new MypageDTO.UpdateDTO(member);
+
+            return response.success(memberUpdate,"회원정보 수정했습니다. ");
+        }catch (MemberException e) {
+            e.printStackTrace();
+            throw new MemberException(ErrorCode.UPDATE_FAIL);
+        }
+    }
+
 }

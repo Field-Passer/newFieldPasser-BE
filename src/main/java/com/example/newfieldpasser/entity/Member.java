@@ -76,14 +76,14 @@ public class Member {
         return member;
     }
 
-    public static Member updateUser(MypageDTO.UpdateDTO updateDTO){
-     Member member = new Member();
+    public void updateMember(String memberId, String memberName,String memberNickName,String memberPhone){
+        this.memberId = memberId;
+        this.memberName = memberName;
+        this.memberNickName = memberNickName;
+        this.memberPhone = memberPhone;
 
-     member.memberId = updateDTO.getMemberId();
-     member.memberName = updateDTO.getMemberName();
-     member.memberNickName = updateDTO.getMemberNickName();
-     member.memberPhone = updateDTO.getMemberPhone();
-
-     return member;
     }
+
+
+
 }
