@@ -7,7 +7,8 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
     BOARD_INQUIRY_DETAIL_FAIL(HttpStatus.BAD_REQUEST, "Board Inquiry Failed!"),
-    BOARD_EDIT_FAIL(HttpStatus.BAD_REQUEST, "Board Edit Failed!");
+    BOARD_EDIT_FAIL(HttpStatus.BAD_REQUEST, "Board Edit Failed!"),
+    BOARD_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Board Delete Failed!");
     private final HttpStatus status;
     private final String message;
 }

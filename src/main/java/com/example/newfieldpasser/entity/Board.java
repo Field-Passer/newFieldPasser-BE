@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,6 +20,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "board")
+@SQLDelete(sql = "UPDATE board SET delete_check = true, delete_date = now() WHERE board_id = ?")
+@Where(clause = "delete_check = false AND blind = false")
 public class Board {
     @Id
     @Column(name = "board_id")
