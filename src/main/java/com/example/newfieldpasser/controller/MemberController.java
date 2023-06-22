@@ -4,6 +4,7 @@ import com.example.newfieldpasser.dto.AuthDTO;
 import com.example.newfieldpasser.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +29,9 @@ public class MemberController {
     회원 정보 조회
     */
 
-    @GetMapping("/memberservice/:memberId")
-    public ResponseEntity<?> selectMember(@AuthenticationPrincipal AuthDTO.LoginDto loginDto){
+    @GetMapping("/my-page/member-inquiry")
+    public ResponseEntity<?> selectMember(Authentication authentication){
 
-        return memberService.selectMember(loginDto);
+        return memberService.selectMember(authentication);
     }
 }

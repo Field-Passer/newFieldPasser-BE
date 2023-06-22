@@ -1,7 +1,7 @@
 package com.example.newfieldpasser.service;
 
 import com.example.newfieldpasser.dto.AuthDTO;
-import com.example.newfieldpasser.dto.MemberInfo;
+import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.member.ErrorCode;
@@ -9,6 +9,7 @@ import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final Response response;
     private final BCryptPasswordEncoder encoder;
+
+    private final AuthService authService;
 
     @Transactional
     public ResponseEntity<?> signupMember(AuthDTO.SignupDto signupDto) {
@@ -49,11 +52,13 @@ public class MemberService {
     /*
     회원정보 조회
     */
-    public ResponseEntity<?> selectMember(AuthDTO.LoginDto loginDto){
+    public ResponseEntity<?> selectMember(Authentication authentication){
         try{
 
-            MemberInfo memberinfo = memberRepository.findByMemberId(loginDto.getMemberId()).
-                    map(member -> new MemberInfo(member)).get();
+            Member member = memberRepository.findByMemberId(authentication.getName()).get();
+
+            MypageDTO.MemberInfo memberinfo = new MypageDTO.MemberInfo(member);
+
             return response.success(memberinfo,"회원 정보를 성공적으로 불러왔습니다.");
         }catch (MemberException e){
             e.printStackTrace();

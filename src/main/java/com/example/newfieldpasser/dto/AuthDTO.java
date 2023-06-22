@@ -1,5 +1,6 @@
 package com.example.newfieldpasser.dto;
 
+import com.example.newfieldpasser.entity.Member;
 import lombok.*;
 
 public class AuthDTO {
@@ -37,6 +38,8 @@ public class AuthDTO {
             this.memberPhone = memberPhone;
         }
     }
+
+
 
 
     @Getter
