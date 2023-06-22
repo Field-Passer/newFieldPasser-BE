@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.newfieldpasser.dto.BoardDTO;
 import com.example.newfieldpasser.dto.Response;
+import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Category;
 import com.example.newfieldpasser.entity.District;
 import com.example.newfieldpasser.entity.Member;
@@ -104,6 +105,33 @@ public class BoardService {
             log.error("게시글 상세조회 실패!");
             e.printStackTrace();
             throw new BoardException(ErrorCode.BOARD_INQUIRY_DETAIL_FAIL);
+        }
+    }
+
+    /*
+    게시글 수정
+     */
+    @Transactional
+    public ResponseEntity<?> editBoard(long boardId, MultipartFile file, BoardDTO.boardReqDTO boardReqDTO) {
+        try {
+
+            Board board = boardRepository.findByBoardId(boardId).get();
+            String changedImageUrl = uploadPic(file);
+            Category category = categoryRepository.findByCategoryName(boardReqDTO.getCategoryName()).get();
+            District district = districtRepository.findByDistrictName(boardReqDTO.getDistrictName()).get();
+
+            board.updatePost(category, district, changedImageUrl,
+                    boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getStartTime(),
+                    boardReqDTO.getEndTime(), boardReqDTO.getTransactionStatus(), boardReqDTO.getPrice());
+
+            return response.success("Edit Board Success!");
+
+        } catch (IOException e) {
+            log.error("Fail Upload file!");
+            return response.fail("Fail Upload file!");
+        } catch (BoardException e) {
+            log.error("게시글 수정 실패!");
+            throw new BoardException(ErrorCode.BOARD_EDIT_FAIL);
         }
     }
 
