@@ -1,6 +1,7 @@
 package com.example.newfieldpasser.entity;
 
 import com.example.newfieldpasser.dto.AuthDTO;
+import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.parameter.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -73,5 +74,16 @@ public class Member {
         member.role = Role.USER;
 
         return member;
+    }
+
+    public static Member updateUser(MypageDTO.UpdateDTO updateDTO){
+     Member member = new Member();
+
+     member.memberId = updateDTO.getMemberId();
+     member.memberName = updateDTO.getMemberName();
+     member.memberNickName = updateDTO.getMemberNickName();
+     member.memberPhone = updateDTO.getMemberPhone();
+
+     return member;
     }
 }
