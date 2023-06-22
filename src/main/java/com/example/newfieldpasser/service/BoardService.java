@@ -135,4 +135,21 @@ public class BoardService {
         }
     }
 
+    /*
+    게시글 삭제
+     */
+    @Transactional
+    public ResponseEntity<?> deleteBoard(long boardId) {
+        try {
+
+            boardRepository.deleteByBoardId(boardId);
+
+            return response.success("Delete Board Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 삭제 실패!");
+            throw new BoardException(ErrorCode.BOARD_DELETE_FAIL);
+        }
+    }
+
 }
