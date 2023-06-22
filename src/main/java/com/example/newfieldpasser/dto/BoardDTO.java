@@ -48,6 +48,7 @@ public class BoardDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class boardResDTO {
         private long boardId;
+        private String memberId;
         private String memberName;
         private String categoryName;
         private String districtName;
@@ -68,6 +69,7 @@ public class BoardDTO {
         @Builder
         public boardResDTO(Board board) {
             this.boardId = board.getBoardId();
+            this.memberId = board.getMember().getMemberId();
             this.memberName = board.getMember().getMemberName();
             this.categoryName = board.getCategory().getCategoryName();
             this.districtName = board.getDistrict().getDistrictName();
