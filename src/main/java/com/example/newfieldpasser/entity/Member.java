@@ -76,8 +76,9 @@ public class Member {
         return member;
     }
 
-    public void updateMember(String memberId, String memberName,String memberNickName,String memberPhone){
-        this.memberId = memberId;
+    public void updateMember( String memberName,
+                             String memberNickName,String memberPhone){
+
         this.memberName = memberName;
         this.memberNickName = memberNickName;
         this.memberPhone = memberPhone;

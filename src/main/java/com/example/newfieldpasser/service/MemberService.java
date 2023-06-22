@@ -69,11 +69,12 @@ public class MemberService {
     /*
     회원정보 수정
     */
+    @Transactional
     public ResponseEntity<?> updateMember(Authentication authentication,MypageDTO.UpdateDTO updateDTO){
         try{
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
 
-            member.updateMember(updateDTO.getMemberId(),updateDTO.getMemberName(),
+            member.updateMember(updateDTO.getMemberName(),
                     updateDTO.getMemberNickName(),updateDTO.getMemberPhone());
 
             MypageDTO.UpdateDTO memberUpdate = new MypageDTO.UpdateDTO(member);
