@@ -4,6 +4,7 @@ import com.example.newfieldpasser.entity.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class MypageDTO {
 
@@ -21,5 +22,24 @@ public class MypageDTO {
             this.memberNickName = member.getMemberNickName();
             this.memberPhone = member.getMemberPhone();
         }
+    }
+
+
+    @Getter
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UpdateDTO{
+        private String memberId;
+        private String memberName;
+        private String memberNickName;
+        private String memberPhone;
+
+        public UpdateDTO(Member member) {
+            this.memberId = member.getMemberId();
+            this.memberName = member.getMemberName();
+            this.memberNickName = member.getMemberNickName();
+            this.memberPhone = member.getMemberPhone();
+        }
+
     }
 }
