@@ -7,6 +7,7 @@ import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.member.ErrorCode;
 import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.repository.MemberRepository;
+import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,8 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
 
     private final AuthService authService;
+
+    private final MailService mailService;
 
     @Transactional
     public ResponseEntity<?> signupMember(AuthDTO.SignupDto signupDto) {
@@ -88,6 +91,34 @@ public class MemberService {
         }
     }
 
+
+    /*
+    임시 비밀번호 생성, 저장, 메일 보내기
+    */
+    @Transactional
+    public ResponseEntity<?> sendPwdEmail(Authentication authentication){
+
+        log.info("sendPwdEmail 진입1");
+        try{
+            log.info("sendPwdEmail 진입2");
+            log.info("이메일 : "+ authentication.getName());
+            /** 임시 비밀번호 생성 **/
+            String tmpPassword = getTmpPassword();
+
+            /** 임시 비밀번호 저장 **/
+            updatePasswordMail(tmpPassword,authentication);
+
+            /** 메일 생성 & 전송 **/
+            MailVo mail = mailService.createMail(tmpPassword,authentication);
+            mailService.sendMail(mail);
+
+            log.info("임시 비밀번호 전송 완료");
+            return response.success("임시 비밀번호 전송 완료");
+        }catch (Exception e){
+            e.printStackTrace();
+            return response.fail("이메일 전송 실패");
+        }
+    }
 
     /*
     임시 비밀번호 생성
