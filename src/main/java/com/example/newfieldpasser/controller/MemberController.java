@@ -41,7 +41,7 @@ public class MemberController {
     /*
     회원 정보 수정
     */
-    @PatchMapping("/my-page/member-correction")
+    @PatchMapping("/my-page/edit-info")
     public ResponseEntity<?> updateMember(Authentication authentication,
                                           @RequestBody MypageDTO.UpdateDTO updateDTO){
         return memberService.updateMember(authentication, updateDTO);
