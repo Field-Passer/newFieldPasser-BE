@@ -9,7 +9,10 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     SIGNUP_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Requested Signup Failed"),
+    UPDATE_FAIL(HttpStatus.BAD_REQUEST,"Update Failed"),
     ALREADY_EXIST(HttpStatus.CONFLICT, "Already Registered Email");
+
+
     private final HttpStatus status;
     private final String message;
 }

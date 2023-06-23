@@ -1,15 +1,13 @@
 package com.example.newfieldpasser.controller;
 
 import com.example.newfieldpasser.dto.AuthDTO;
+import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,4 +32,14 @@ public class MemberController {
 
         return memberService.selectMember(authentication);
     }
+
+    /*
+    회원 정보 수정
+    */
+    @PatchMapping("/my-page/member-correction")
+    public ResponseEntity<?> updateMember(Authentication authentication,
+                                          @RequestBody MypageDTO.UpdateDTO updateDTO){
+        return memberService.updateMember(authentication, updateDTO);
+    }
+
 }
