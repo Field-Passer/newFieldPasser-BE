@@ -82,9 +82,11 @@ public class Member {
         this.memberName = memberName;
         this.memberNickName = memberNickName;
         this.memberPhone = memberPhone;
-
     }
 
+    public void updatePassword(String password){
+        this.password = password;
+    }
 
 
 }
