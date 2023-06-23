@@ -17,6 +17,9 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -152,4 +155,80 @@ public class BoardService {
         }
     }
 
+    /*
+    게시글 리스트 조회
+     */
+    public ResponseEntity<?> boardListInquiry(int page) {
+        try {
+
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository.findDefaultAll(pageRequest).map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 카테고리별
+     */
+    public ResponseEntity<?> boardListInquiryByCategory(int categoryId, int page) {
+        try {
+
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository.findByCategory_CategoryId(categoryId, pageRequest).map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 지역별
+     */
+    public ResponseEntity<?> boardListInquiryByDistrict(int districtId, int page) {
+        try {
+
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository.findByDistrict_DistrictId(districtId, pageRequest).map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 카테고리 + 지역
+     */
+    public ResponseEntity<?> boardListInquiryByCategoryAndDistrict(int categoryId, int districtId, int page) {
+        try {
+
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository.findByCategory_CategoryIdAndDistrict_DistrictId(categoryId, districtId, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
 }

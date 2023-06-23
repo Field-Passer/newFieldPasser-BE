@@ -1,6 +1,9 @@
 package com.example.newfieldpasser.repository;
 
 import com.example.newfieldpasser.entity.Board;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +20,18 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Modifying
     void deleteByBoardId(@Param("boardId") long boardId);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    @Query("select b from Board b")
+    Slice<Board> findDefaultAll(PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    Slice<Board> findByCategory_CategoryId(int categoryId, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    Slice<Board> findByDistrict_DistrictId(int districtId, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    Slice<Board> findByCategory_CategoryIdAndDistrict_DistrictId(int categoryId, int districtId, PageRequest pageRequest);
+
 }

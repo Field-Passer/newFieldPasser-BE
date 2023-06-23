@@ -29,7 +29,7 @@ public class BoardController {
     게시글 상세조회
      */
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<?> registerBoard(@PathVariable long boardId) {
+    public ResponseEntity<?> boardInquiryDetail(@PathVariable long boardId) {
         // 상세조회 시 조회 수 카운트
         boardService.updateViewCount(boardId);
 
@@ -54,5 +54,45 @@ public class BoardController {
     public ResponseEntity<?> deleteBoard(@PathVariable long boardId) {
 
         return boardService.deleteBoard(boardId);
+    }
+
+    /*
+    게시글 리스트 조회
+     */
+    @GetMapping("/board/list/{page}")
+    public ResponseEntity<?> boardListInquiry(@PathVariable int page) {
+
+        return boardService.boardListInquiry(page);
+    }
+
+    /*
+    게시글 리스트 조회 - 카테고리별
+     */
+    @GetMapping("/board/list/category/{categoryId}/{page}")
+    public ResponseEntity<?> boardListInquiryByCategory(@PathVariable int categoryId,
+                                                        @PathVariable int page) {
+
+        return boardService.boardListInquiryByCategory(categoryId, page);
+    }
+
+    /*
+    게시글 리스트 조회 - 지역별
+     */
+    @GetMapping("/board/list/district/{districtId}/{page}")
+    public ResponseEntity<?> boardListInquiryByDistrict(@PathVariable int districtId,
+                                                        @PathVariable int page) {
+
+        return boardService.boardListInquiryByDistrict(districtId, page);
+    }
+
+    /*
+    게시글 리스트 조회 - 카테고리 + 지역
+     */
+    @GetMapping("/board/list/category-district/{categoryId}/{districtId}/{page}")
+    public ResponseEntity<?> boardListInquiryByCategoryAndDistrict(@PathVariable int categoryId,
+                                                                   @PathVariable int districtId,
+                                                                   @PathVariable int page) {
+
+        return boardService.boardListInquiryByCategoryAndDistrict(categoryId, districtId, page);
     }
 }
