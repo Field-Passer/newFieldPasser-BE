@@ -7,7 +7,9 @@ import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.member.ErrorCode;
 import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.repository.MemberRepository;
+import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -24,6 +27,8 @@ public class MemberService {
     private final BCryptPasswordEncoder encoder;
 
     private final AuthService authService;
+
+    private final MailService mailService;
 
     @Transactional
     public ResponseEntity<?> signupMember(AuthDTO.SignupDto signupDto) {
@@ -86,4 +91,71 @@ public class MemberService {
         }
     }
 
+
+    /*
+    임시 비밀번호 생성, 저장, 메일 보내기
+    */
+    @Transactional
+    public ResponseEntity<?> sendPwdEmail(Authentication authentication){
+
+        log.info("sendPwdEmail 진입1");
+        try{
+            log.info("sendPwdEmail 진입2");
+            log.info("이메일 : "+ authentication.getName());
+            /** 임시 비밀번호 생성 **/
+            String tmpPassword = getTmpPassword();
+
+            /** 임시 비밀번호 저장 **/
+            updatePasswordMail(tmpPassword,authentication);
+
+            /** 메일 생성 & 전송 **/
+            MailVo mail = mailService.createMail(tmpPassword,authentication);
+            mailService.sendMail(mail);
+
+            log.info("임시 비밀번호 전송 완료");
+            return response.success("임시 비밀번호 전송 완료");
+        }catch (Exception e){
+            e.printStackTrace();
+            return response.fail("이메일 전송 실패");
+        }
+    }
+
+    /*
+    임시 비밀번호 생성
+    */
+    public String getTmpPassword(){
+        char[] charSet = new char[]{ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+
+        String pwd = "";
+
+        /* 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 조합 */
+        int idx = 0;
+        for(int i = 0; i < 10; i++){
+            idx = (int) (charSet.length * Math.random());
+            pwd += charSet[idx];
+        }
+
+        log.info("임시 비밀번호 생성");
+
+        return pwd;
+    }
+
+    /*
+    임시 비밀번호로 업데이트
+    */
+    @Transactional
+    public void updatePasswordMail(String tmpPassword ,Authentication authentication) {
+
+        Member member = memberRepository.findByMemberId(authentication.getName()).get();
+
+        if(member.getMemberId() == null){
+            log.info("해당 이메일이 없습니다 ");
+        }else {
+            String encryptPassword = encoder.encode(tmpPassword);
+            member.updatePassword(encryptPassword);
+            log.info("임시 비밀번호 업데이트");
+        }
+    }
 }
