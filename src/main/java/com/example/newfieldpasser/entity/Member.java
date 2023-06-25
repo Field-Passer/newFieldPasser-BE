@@ -84,6 +84,10 @@ public class Member {
         this.memberPhone = memberPhone;
     }
 
+    public void editPassword(String password){
+        this.password= password;
+    }
+
     public void updatePassword(String password){
         this.password = password;
     }

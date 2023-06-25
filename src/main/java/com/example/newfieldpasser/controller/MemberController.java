@@ -58,4 +58,11 @@ public class MemberController {
         return memberService.sendPwdEmail(authentication);
     }
 
+    /*
+     비밀번호 변경
+    */
+    @PostMapping("/my-page/edit-password")
+    public ResponseEntity<?>editPassword(Authentication authentication , @RequestBody MypageDTO.updatePassword passwordDTO){
+        return memberService.editPassword(authentication,passwordDTO);
+    }
 }
