@@ -42,4 +42,15 @@ public class MypageDTO {
         }
 
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class updatePassword{
+        private String password;
+
+        public updatePassword(Member member){
+            this.password=member.getPassword();
+        }
+    }
 }

@@ -127,4 +127,20 @@ public class MemberService {
             log.info("임시 비밀번호 업데이트");
         }
     }
+
+    /*
+    비밀번호 변경
+    */
+    @Transactional
+    public ResponseEntity<?> editPassword(Authentication authentication, MypageDTO.updatePassword passwordDTO){
+        Member member = memberRepository.findByMemberId(authentication.getName()).get();
+
+        if(member != null){
+            member.editPassword(encoder.encode(passwordDTO.getPassword()));
+            return response.success("비밀번호 변경 성공하셨습니다");
+        }else{
+            return response.fail("비밀번호 변경을 할 수 없습니다");
+        }
+
+    }
 }
