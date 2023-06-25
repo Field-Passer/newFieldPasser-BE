@@ -95,4 +95,48 @@ public class BoardController {
 
         return boardService.boardListInquiryByCategoryAndDistrict(categoryId, districtId, page);
     }
+
+    /*
+    게시글 리스트 제목으로 검색
+     */
+    @GetMapping("/board/search-title/{page}")
+    public ResponseEntity<?> boardListInquiryByTitle(@RequestParam(name = "title") String title,
+                                                     @PathVariable int page) {
+
+        return boardService.boardListInquiryByTitle(title, page);
+    }
+
+    /*
+    게시글 리스트 제목 + 카테고리로 검색
+     */
+    @GetMapping("/board/search-title-category/{categoryId}/{page}")
+    public ResponseEntity<?> boardListInquiryByTitleAndCategory(@RequestParam(name = "title") String title,
+                                                                @PathVariable int categoryId,
+                                                                @PathVariable int page) {
+
+        return boardService.boardListInquiryByTitleAndCategory(title, categoryId, page);
+    }
+
+    /*
+    게시글 리스트 제목 + 지역으로 검색
+     */
+    @GetMapping("/board/search-title-district/{districtId}/{page}")
+    public ResponseEntity<?> boardListInquiryByTitleAndDistrict(@RequestParam(name = "title") String title,
+                                                                @PathVariable int districtId,
+                                                                @PathVariable int page) {
+
+        return boardService.boardListInquiryByTitleAndDistrict(title, districtId, page);
+    }
+
+    /*
+    게시글 리스트 제목 + 카테고리 + 지역으로 검색
+     */
+    @GetMapping("/board/search-title-category-district/{categoryId}/{districtId}/{page}")
+    public ResponseEntity<?> boardListInquiryByTitleAndCategoryAndDistrict(@RequestParam(name = "title") String title,
+                                                                           @PathVariable int categoryId,
+                                                                           @PathVariable int districtId,
+                                                                           @PathVariable int page) {
+
+        return boardService.boardListInquiryByTitleAndCategoryAndDistrict(title, categoryId, districtId, page);
+    }
 }

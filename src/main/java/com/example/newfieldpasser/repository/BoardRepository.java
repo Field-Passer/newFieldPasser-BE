@@ -34,4 +34,19 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @EntityGraph(attributePaths = {"member","category","district"})
     Slice<Board> findByCategory_CategoryIdAndDistrict_DistrictId(int categoryId, int districtId, PageRequest pageRequest);
 
+    @EntityGraph(attributePaths = {"member","category","district"})
+    Slice<Board> findByTitleContaining(String title, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    Slice<Board> findByTitleContainingAndCategory_CategoryId(String title, int categoryId, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    Slice<Board> findByTitleContainingAndDistrict_DistrictId(String title, int districtId, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    Slice<Board> findByTitleContainingAndCategory_CategoryIdAndDistrict_DistrictId(String title,
+                                                                                   int categoryId,
+                                                                                   int districtId,
+                                                                                   PageRequest pageRequest);
+
 }
