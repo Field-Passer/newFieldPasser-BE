@@ -98,9 +98,9 @@ public class MemberService {
     @Transactional
     public ResponseEntity<?> sendPwdEmail(Authentication authentication){
 
-        log.info("sendPwdEmail 진입1");
+
         try{
-            log.info("sendPwdEmail 진입2");
+
             log.info("이메일 : "+ authentication.getName());
             /** 임시 비밀번호 생성 **/
             String tmpPassword = getTmpPassword();
@@ -109,7 +109,7 @@ public class MemberService {
             updatePasswordMail(tmpPassword,authentication);
 
             /** 메일 생성 & 전송 **/
-            MailVo mail = mailService.createMail(tmpPassword,authentication);
+            MailVo mail = mailService.createPassword(tmpPassword,authentication);
             mailService.sendMail(mail);
 
             log.info("임시 비밀번호 전송 완료");
@@ -192,5 +192,42 @@ public class MemberService {
             throw new MemberException(ErrorCode.DELETE_FAIL);
         }
 
+    }
+
+  /*
+  이메일 인증
+  */
+
+    public ResponseEntity<?> emailAuthentication(AuthDTO.SignupDto signupDto){
+        try{
+            log.info("이메일 : "+ signupDto.getMemberId());
+            /** PIN CREATE **/
+            String pinNumber = getTmpPassword();
+
+            /** 메일 생성 & 전송 **/
+            MailVo mail = mailService.createMail(pinNumber,signupDto.getMemberId());
+            mailService.sendMail(mail);
+
+            return response.success("Send Email Success");
+        }catch(MemberException e){
+            e.printStackTrace();
+            throw new MemberException(ErrorCode.SEND_EMAIL_FAIL);
+        }
+    }
+
+    /*
+      이메일 중복검사
+    */
+
+    public ResponseEntity<?> dupeEmailCheck(AuthDTO.SignupDto signupDto){
+
+
+            if(memberRepository.existsById(signupDto.getMemberId())) {
+                return response.fail(String.format("%s : %s", ErrorCode.ALREADY_EXIST.getMessage(), signupDto.getMemberId()),
+                        ErrorCode.ALREADY_EXIST.getStatus());
+            }else{
+
+                return response.success("사용가능한 이메일 입니다");
+            }
     }
 }
