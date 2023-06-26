@@ -53,4 +53,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("update Board b set b.wishCount = b.wishCount + 1 where b.boardId = :boardId")
     void updateWishCount(@Param("boardId") long boardId);
 
+    @Modifying
+    @Query("update Board b set b.wishCount = b.wishCount - 1 where b.boardId = :boardId")
+    void minusWishCount(@Param("boardId") long boardId);
+
 }
