@@ -11,7 +11,11 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.repository.WishBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +30,9 @@ public class WishBoardService {
     private final MemberRepository memberRepository;
     private final Response response;
 
+    /*
+    관심 글 등록
+     */
     @Transactional
     public ResponseEntity<?> likeBoard(WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
 
@@ -45,8 +52,47 @@ public class WishBoardService {
             return response.success("Register WishBoard Success!");
 
         } catch (BoardException e) {
-            log.error("게시글 좋아요 실패!");
+            log.error("관심 글 등록 실패!");
             throw new BoardException(ErrorCode.REGISTER_WISH_BOARD_FAIL);
+        }
+    }
+
+    /*
+    관심 글 조회
+     */
+    public ResponseEntity<?> wishList(int page, Authentication authentication) {
+        try {
+            String memberId = authentication.getName();
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate")); // 관심 글 등록한 날짜 기준
+            Slice<WishBoardDTO.WishBoardResDTO> result = wishBoardRepository.findByMemberId(memberId, pageRequest).map(WishBoardDTO.WishBoardResDTO::new);
+
+            return response.success(result, "WishList Inquiry Success!");
+        } catch (BoardException e) {
+            log.error("관심 글 조회 실패!");
+            throw new BoardException(ErrorCode.WISH_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    관심 글 삭제
+     */
+    @Transactional
+    public ResponseEntity<?> deleteWishBoard(WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
+        try {
+            String memberId = wishPostReqDTO.getMemberId();
+            long boardId = wishPostReqDTO.getBoardId();
+
+            if (wishBoardRepository.existsByMember_MemberIdAndBoard_BoardId(memberId, boardId)) {
+                boardRepository.minusWishCount(boardId);
+            }
+
+            wishBoardRepository.deleteByBoard_BoardIdAndMember_MemberId(boardId, memberId);
+
+            return response.success("Delete WishBoard Success!");
+
+        } catch (BoardException e) {
+            log.error("관심 글 삭제 실패!");
+            throw new BoardException(ErrorCode.WISH_BOARD_DELETE_FAIL);
         }
     }
 }
