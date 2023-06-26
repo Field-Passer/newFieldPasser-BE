@@ -67,8 +67,25 @@ public class MemberController {
     회원 탈퇴
     */
 
-    @DeleteMapping("/my-page/member")
+    @DeleteMapping("/my-page/withdrawal")
     public ResponseEntity<?> deleteMember(Authentication authentication){
         return memberService.deleteMember(authentication);
+    }
+
+    /*
+    이메일 인증번호 보내기
+    */
+
+    @GetMapping("/check-email")
+    public ResponseEntity<?> emailAuthentication(@RequestBody AuthDTO.SignupDto signupDto){
+        return memberService.emailAuthentication(signupDto);
+    }
+
+    /*
+      이메일 중복검사
+    */
+    @GetMapping("/dupe-email")
+    public ResponseEntity<?> dupeEmailCheck(@RequestBody AuthDTO.SignupDto signupDto){
+        return memberService.dupeEmailCheck(signupDto);
     }
 }
