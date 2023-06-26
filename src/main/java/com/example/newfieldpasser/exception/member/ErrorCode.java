@@ -12,6 +12,8 @@ public enum ErrorCode {
     UPDATE_FAIL(HttpStatus.BAD_REQUEST,"Update Failed"),
 
     DELETE_FAIL(HttpStatus.BAD_REQUEST,"Delete Failed"),
+
+    SEND_EMAIL_FAIL(HttpStatus.BAD_REQUEST,"Sned Email failed"),
     ALREADY_EXIST(HttpStatus.CONFLICT, "Already Registered Email");
 
 
