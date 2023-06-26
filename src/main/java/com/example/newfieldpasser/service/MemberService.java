@@ -150,7 +150,7 @@ public class MemberService {
 
         if(member.getMemberId() == null){
             log.info("해당 이메일이 없습니다 ");
-        }else {
+        } else {
             String encryptPassword = encoder.encode(tmpPassword);
             member.updatePassword(encryptPassword);
             log.info("임시 비밀번호 업데이트");
@@ -167,7 +167,7 @@ public class MemberService {
         if(member != null){
             member.editPassword(encoder.encode(passwordDTO.getPassword()));
             return response.success("비밀번호 변경 성공하셨습니다");
-        }else{
+        } else {
             return response.fail("비밀번호 변경을 할 수 없습니다");
         }
 
@@ -185,19 +185,17 @@ public class MemberService {
             memberRepository.deleteByMemberId(member.getMemberId());
 
             return response.success("Delete Member success");
-        }catch(MemberException e){
+
+        } catch(MemberException e) {
             e.printStackTrace();
             throw new MemberException(ErrorCode.DELETE_FAIL);
         }
 
     }
 
-
     /*
     이메일 인증
     */
-
-
 /*    public ResponseEntity<?> emailAuthentication(AuthDTO.SignupDto signupDto){
         try{
             log.info("이메일 : "+ signupDto.getMemberId());
@@ -216,22 +214,51 @@ public class MemberService {
     }*/
 
 
-
-
-
     /*
       이메일 중복검사
     */
-
     public ResponseEntity<?> dupeEmailCheck(AuthDTO.SignupDto signupDto){
-
-
             if(memberRepository.existsById(signupDto.getMemberId())) {
                 return response.fail(String.format("%s : %s", ErrorCode.ALREADY_EXIST.getMessage(), signupDto.getMemberId()),
                         ErrorCode.ALREADY_EXIST.getStatus());
-            }else{
-
+            } else {
                 return response.success("사용가능한 이메일 입니다");
             }
+    }
+
+    /*
+    관리자 승격
+     */
+    @Transactional
+    public ResponseEntity<?> promoteAdmin(String memberId) {
+        try {
+
+            Member member = memberRepository.findByMemberId(memberId).get();
+            member.promoteAdmin();
+
+            return response.success("Promote Admin Success!");
+
+        } catch (MemberException e) {
+            log.error("관리자 승격 실패!");
+            throw new MemberException(ErrorCode.UPDATE_FAIL);
+        }
+    }
+
+    /*
+    사용자로 전환
+     */
+    @Transactional
+    public ResponseEntity<?> demoteUser(String memberId) {
+        try {
+
+            Member member = memberRepository.findByMemberId(memberId).get();
+            member.changeUser();
+
+            return response.success("Change User Success!");
+
+        } catch (MemberException e) {
+            log.error("관리자 승격 실패!");
+            throw new MemberException(ErrorCode.UPDATE_FAIL);
+        }
     }
 }

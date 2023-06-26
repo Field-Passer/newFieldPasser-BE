@@ -25,10 +25,6 @@ public class Answer {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id")
-    private Question question;
-
     @Column(name = "answer_title")
     private String answerTitle;
 

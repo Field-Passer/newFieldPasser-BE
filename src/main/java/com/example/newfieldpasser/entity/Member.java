@@ -96,5 +96,11 @@ public class Member {
         this.password = password;
     }
 
+    public void promoteAdmin() {
+        this.role = Role.ADMIN;
+    }
 
+    public void changeUser() {
+        this.role = Role.USER;
+    }
 }

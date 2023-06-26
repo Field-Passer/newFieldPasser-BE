@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .antMatchers("/board/**").authenticated()// 게시글 관련 인증 필요
                 .antMatchers("/my-page/**").authenticated() // 마이페이지 인증 필요
                 .antMatchers("/question/**").authenticated() // 문의글 관련 인증 필요
-                //.antMatchers("/api/admin/**").hasRole("ADMIN") // 관리자 페이지
+                .antMatchers("/admin/**").hasRole("ADMIN") // 관리자 페이지
                 .anyRequest().permitAll()
 
                 .and()
