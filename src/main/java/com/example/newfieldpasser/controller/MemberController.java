@@ -76,15 +76,17 @@ public class MemberController {
     이메일 인증번호 보내기
     */
 
-    @GetMapping("/check-email")
+    /*
+    @PostMapping("/check-email")
     public ResponseEntity<?> emailAuthentication(@RequestBody AuthDTO.SignupDto signupDto){
         return memberService.emailAuthentication(signupDto);
-    }
+    }*/
+
 
     /*
       이메일 중복검사
     */
-    @GetMapping("/dupe-email")
+    @GetMapping("/duplicate-email")
     public ResponseEntity<?> dupeEmailCheck(@RequestBody AuthDTO.SignupDto signupDto){
         return memberService.dupeEmailCheck(signupDto);
     }

@@ -26,8 +26,6 @@ public class MemberService {
     private final Response response;
     private final BCryptPasswordEncoder encoder;
 
-    private final AuthService authService;
-
     private final MailService mailService;
 
     @Transactional
@@ -194,17 +192,19 @@ public class MemberService {
 
     }
 
-  /*
-  이메일 인증
-  */
 
-    public ResponseEntity<?> emailAuthentication(AuthDTO.SignupDto signupDto){
+    /*
+    이메일 인증
+    */
+
+
+/*    public ResponseEntity<?> emailAuthentication(AuthDTO.SignupDto signupDto){
         try{
             log.info("이메일 : "+ signupDto.getMemberId());
-            /** PIN CREATE **/
+            *//** PIN CREATE **//*
             String pinNumber = getTmpPassword();
 
-            /** 메일 생성 & 전송 **/
+            *//** 메일 생성 & 전송 **//*
             MailVo mail = mailService.createMail(pinNumber,signupDto.getMemberId());
             mailService.sendMail(mail);
 
@@ -213,7 +213,11 @@ public class MemberService {
             e.printStackTrace();
             throw new MemberException(ErrorCode.SEND_EMAIL_FAIL);
         }
-    }
+    }*/
+
+
+
+
 
     /*
       이메일 중복검사
