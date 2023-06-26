@@ -117,4 +117,17 @@ public class QuestionService {
         }
     }
 
+    public ResponseEntity<?> inquiryAllQuestion(int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "questionRegisterDate"));
+            Slice<QuestionDTO.QuestionResDTO> result = questionRepository.findDefaultAll(pageRequest).map(QuestionDTO.QuestionResDTO::new);
+
+            return response.success(result, "All Question List Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("문의글 조회 실패!");
+            throw new BoardException(ErrorCode.QUESTION_LIST_INQUIRY_FAIL);
+        }
+    }
+
 }
