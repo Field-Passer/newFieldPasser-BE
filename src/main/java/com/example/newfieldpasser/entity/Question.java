@@ -33,7 +33,8 @@ public class Question {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "question")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "answer_id")
     private Answer answer;
 
     @Column(name = "question_title")
@@ -67,5 +68,13 @@ public class Question {
         this.questionContent = questionContent;
         this.questionCategory = questionCategory;
         this.questionProcess = questionProcess;
+    }
+
+    public void updateQuestionProcess() {
+        this.questionProcess = QuestionProcess.COMPLETE_ANSWER;
+    }
+
+    public void registerAnswer(Answer answer) {
+        this.answer = answer;
     }
 }
