@@ -65,4 +65,13 @@ public class MemberController {
     public ResponseEntity<?>editPassword(Authentication authentication , @RequestBody MypageDTO.updatePassword passwordDTO){
         return memberService.editPassword(authentication,passwordDTO);
     }
+
+    /*
+    회원 탈퇴
+    */
+
+    @DeleteMapping("/my-page/member")
+    public ResponseEntity<?> deleteMember(Authentication authentication){
+        return memberService.deleteMember(authentication);
+    }
 }

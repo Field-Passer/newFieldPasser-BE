@@ -174,4 +174,23 @@ public class MemberService {
         }
 
     }
+
+    /*
+    회원탈퇴
+    */
+    @Transactional
+    public ResponseEntity<?> deleteMember(Authentication authentication){
+
+        try{
+
+            Member member = memberRepository.findByMemberId(authentication.getName()).get();
+            memberRepository.deleteByMemberId(member.getMemberId());
+
+            return response.success("Delete Member success");
+        }catch(MemberException e){
+            e.printStackTrace();
+            throw new MemberException(ErrorCode.DELETE_FAIL);
+        }
+
+    }
 }

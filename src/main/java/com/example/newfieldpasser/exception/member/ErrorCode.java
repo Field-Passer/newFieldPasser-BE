@@ -10,6 +10,8 @@ public enum ErrorCode {
 
     SIGNUP_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Requested Signup Failed"),
     UPDATE_FAIL(HttpStatus.BAD_REQUEST,"Update Failed"),
+
+    DELETE_FAIL(HttpStatus.BAD_REQUEST,"Delete Failed"),
     ALREADY_EXIST(HttpStatus.CONFLICT, "Already Registered Email");
 
 
