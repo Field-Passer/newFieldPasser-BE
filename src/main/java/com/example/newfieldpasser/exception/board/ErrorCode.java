@@ -9,7 +9,8 @@ public enum ErrorCode {
     BOARD_INQUIRY_DETAIL_FAIL(HttpStatus.BAD_REQUEST, "Board Inquiry Failed!"),
     BOARD_EDIT_FAIL(HttpStatus.BAD_REQUEST, "Board Edit Failed!"),
     BOARD_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Board Delete Failed!"),
-    BOARD_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "BoardList Inquiry Failed!");
+    BOARD_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "BoardList Inquiry Failed!"),
+    REGISTER_WISH_BOARD_FAIL(HttpStatus.BAD_REQUEST, "Register WishBoard Failed!");
     private final HttpStatus status;
     private final String message;
 }
