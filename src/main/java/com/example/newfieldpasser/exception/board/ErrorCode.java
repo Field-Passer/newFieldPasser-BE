@@ -16,7 +16,9 @@ public enum ErrorCode {
     REGISTER_QUESTION_FAIL(HttpStatus.BAD_REQUEST, "Register Question Failed!"),
     QUESTION_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "QuestionList Inquiry Failed!"),
     QUESTION_EDIT_FAIL(HttpStatus.BAD_REQUEST, "Question Edit Failed!"),
-    QUESTION_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Board Delete Failed!");
+    QUESTION_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Board Delete Failed!"),
+    REGISTER_ANSWER_FAIL(HttpStatus.BAD_REQUEST, "Register Answer Failed!"),
+    ALREADY_EXIST_ANSWER(HttpStatus.CONFLICT, "Already Exist Answer!");
     private final HttpStatus status;
     private final String message;
 }
