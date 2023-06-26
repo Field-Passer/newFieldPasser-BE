@@ -4,10 +4,9 @@ import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.entity.Question;
 import com.example.newfieldpasser.parameter.QuestionCategory;
 import com.example.newfieldpasser.parameter.QuestionProcess;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 public class QuestionDTO {
 
@@ -29,5 +28,28 @@ public class QuestionDTO {
                     .build();
         }
 
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class QuestionResDTO {
+        private long questionId;
+        private String questionTitle;
+        private String questionContent;
+        private String questionCategory;
+        private String questionProcess;
+        private LocalDateTime questionRegisterDate;
+        private LocalDateTime questionUpdateDate;
+
+        @Builder
+        public QuestionResDTO(Question question) {
+            this.questionId = question.getQuestionId();
+            this.questionTitle = question.getQuestionTitle();
+            this.questionContent = question.getQuestionContent();
+            this.questionCategory = question.getQuestionCategory().getTitle();
+            this.questionProcess = question.getQuestionProcess().getTitle();
+            this.questionRegisterDate = question.getQuestionRegisterDate();
+            this.questionUpdateDate = question.getQuestionUpdateDate();
+        }
     }
 }

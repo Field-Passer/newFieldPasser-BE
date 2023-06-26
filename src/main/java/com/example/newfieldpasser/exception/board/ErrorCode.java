@@ -13,7 +13,10 @@ public enum ErrorCode {
     REGISTER_WISH_BOARD_FAIL(HttpStatus.BAD_REQUEST, "Register WishBoard Failed!"),
     WISH_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "WishList Inquiry Failed!"),
     WISH_BOARD_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Delete WishBoard Failed!"),
-    REGISTER_QUESTION_FAIL(HttpStatus.BAD_REQUEST, "Register Question Failed!");
+    REGISTER_QUESTION_FAIL(HttpStatus.BAD_REQUEST, "Register Question Failed!"),
+    QUESTION_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "QuestionList Inquiry Failed!"),
+    QUESTION_EDIT_FAIL(HttpStatus.BAD_REQUEST, "Question Edit Failed!"),
+    QUESTION_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Board Delete Failed!");
     private final HttpStatus status;
     private final String message;
 }
