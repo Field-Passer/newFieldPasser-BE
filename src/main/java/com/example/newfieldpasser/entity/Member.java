@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,6 +21,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "member")
+@SQLDelete(sql = "UPDATE member SET member_delete = true WHERE member_id =?")
+@Where(clause = "member_delete = false")
 public class Member {
     @Id
     @Column(name = "member_id")
