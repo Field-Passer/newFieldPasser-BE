@@ -1,11 +1,14 @@
 package com.example.newfieldpasser.service;
 
+import com.example.newfieldpasser.dto.AnswerDTO;
 import com.example.newfieldpasser.dto.QuestionDTO;
 import com.example.newfieldpasser.dto.Response;
+import com.example.newfieldpasser.entity.Answer;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.entity.Question;
 import com.example.newfieldpasser.exception.board.BoardException;
 import com.example.newfieldpasser.exception.board.ErrorCode;
+import com.example.newfieldpasser.repository.AnswerRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +21,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class QuestionService {
 
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
     private final Response response;
 
     /*
@@ -117,6 +119,9 @@ public class QuestionService {
         }
     }
 
+    /*
+    문의글 전체 조회 (관리자용)
+     */
     public ResponseEntity<?> inquiryAllQuestion(int page) {
         try {
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "questionRegisterDate"));
@@ -127,6 +132,25 @@ public class QuestionService {
         } catch (BoardException e) {
             log.error("문의글 조회 실패!");
             throw new BoardException(ErrorCode.QUESTION_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    문의글 답변 조회
+     */
+    public ResponseEntity<?> inquiryAnswer(long questionId) {
+        try {
+            // 해당 문의글을 찾고, 답변 기본키 찾아옴
+            Question question = questionRepository.findByQuestionId(questionId).get();
+            long answerId = question.getAnswer().getAnswerId();
+
+            AnswerDTO.AnswerResDTO result = answerRepository.findByAnswerId(answerId).map(AnswerDTO.AnswerResDTO::new).get();
+
+            return response.success(result, "Answer Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("문의글 답변 조회 실패!");
+            throw new BoardException(ErrorCode.ANSWER_INQUIRY_FAIL);
         }
     }
 

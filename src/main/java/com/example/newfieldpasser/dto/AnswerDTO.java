@@ -2,10 +2,12 @@ package com.example.newfieldpasser.dto;
 
 import com.example.newfieldpasser.entity.Answer;
 import com.example.newfieldpasser.entity.Member;
-import com.example.newfieldpasser.entity.Question;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 public class AnswerDTO {
 
@@ -21,6 +23,23 @@ public class AnswerDTO {
                     .answerTitle(answerTitle)
                     .answerContent(answerContent)
                     .build();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AnswerResDTO {
+        private String answerTitle;
+        private String answerContent;
+        private String memberName;
+        private LocalDateTime answerRegisterDate;
+
+        @Builder
+        public AnswerResDTO(Answer answer) {
+            this.answerTitle = answer.getAnswerTitle();
+            this.answerContent = answer.getAnswerContent();
+            this.memberName = answer.getMember().getMemberName();
+            this.answerRegisterDate = answer.getAnswerRegisterDate();
         }
     }
 }
