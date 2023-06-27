@@ -4,6 +4,7 @@ import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.entity.Question;
 import com.example.newfieldpasser.parameter.QuestionCategory;
 import com.example.newfieldpasser.parameter.QuestionProcess;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class QuestionDTO {
         private String questionProcess;
         private LocalDateTime questionRegisterDate;
         private LocalDateTime questionUpdateDate;
+        private long answerId;
 
         @Builder
         public QuestionResDTO(Question question) {
@@ -50,6 +52,7 @@ public class QuestionDTO {
             this.questionProcess = question.getQuestionProcess().getTitle();
             this.questionRegisterDate = question.getQuestionRegisterDate();
             this.questionUpdateDate = question.getQuestionUpdateDate();
+            this.answerId = (question.getAnswer() == null) ? 0 : question.getAnswer().getAnswerId(); //NPE 방지 외래키 NULL일 경우 0 반환
         }
     }
 }

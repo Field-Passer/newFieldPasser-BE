@@ -60,4 +60,13 @@ public class QuestionController {
         return questionService.deleteQuestion(questionId);
     }
 
+    /*
+    문의글 답변 조회
+     */
+    @GetMapping("/question/answer/{questionId}")
+    public ResponseEntity<?> inquiryAnswer(@PathVariable long questionId) {
+
+        return questionService.inquiryAnswer(questionId);
+    }
+
 }
