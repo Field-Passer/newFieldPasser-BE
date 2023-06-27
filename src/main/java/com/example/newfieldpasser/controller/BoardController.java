@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
 public class BoardController {
@@ -138,5 +140,57 @@ public class BoardController {
                                                                            @PathVariable int page) {
 
         return boardService.boardListInquiryByTitleAndCategoryAndDistrict(title, categoryId, districtId, page);
+    }
+
+    /*
+    게시글 리스트 날짜 + 제목 + 카테고리 + 지역으로 검색
+     */
+    @GetMapping("/board/date/search-title-category-district/{categoryId}/{districtId}/{page}")
+    public ResponseEntity<?> boardListInquiryByDateAndTitleAndCategoryAndDistrict(@RequestParam(name = "title") String title,
+                                                                                  @RequestParam(name = "startTime") String startTime,
+                                                                                  @RequestParam(name = "endTime") String endTime,
+                                                                                  @PathVariable int categoryId,
+                                                                                  @PathVariable int districtId,
+                                                                                  @PathVariable int page) {
+
+        return boardService.boardListInquiryByDateAndTitleAndCategoryAndDistrict(title,startTime,endTime,categoryId,districtId,page);
+    }
+
+    /*
+    게시글 리스트 날짜 + 제목 + 카테고리로 검색
+     */
+    @GetMapping("/board/date/search-title-category/{categoryId}/{page}")
+    public ResponseEntity<?> boardListInquiryByDateAndTitleAndCategory(@RequestParam(name = "title") String title,
+                                                                       @RequestParam(name = "startTime") String startTime,
+                                                                       @RequestParam(name = "endTime") String endTime,
+                                                                       @PathVariable int categoryId,
+                                                                       @PathVariable int page) {
+
+        return boardService.boardListInquiryByDateAndTitleAndCategory(title,startTime,endTime,categoryId,page);
+    }
+
+    /*
+    게시글 리스트 날짜 + 제목 + 카테고리로 검색
+     */
+    @GetMapping("/board/date/search-title-district/{districtId}/{page}")
+    public ResponseEntity<?> boardListInquiryByDateAndTitleAndDistrict(@RequestParam(name = "title") String title,
+                                                                       @RequestParam(name = "startTime") String startTime,
+                                                                       @RequestParam(name = "endTime") String endTime,
+                                                                       @PathVariable int districtId,
+                                                                       @PathVariable int page) {
+
+        return boardService.boardListInquiryByDateAndTitleAndDistrict(title,startTime,endTime,districtId,page);
+    }
+
+    /*
+    게시글 리스트 날짜 + 제목으로 검색
+     */
+    @GetMapping("/board/date/search-title/{page}")
+    public ResponseEntity<?> boardListInquiryByDateAndTitle(@RequestParam(name = "title") String title,
+                                                            @RequestParam(name = "startTime") String startTime,
+                                                            @RequestParam(name = "endTime") String endTime,
+                                                            @PathVariable int page) {
+
+        return boardService.boardListInquiryByDateAndTitle(title,startTime,endTime,page);
     }
 }
