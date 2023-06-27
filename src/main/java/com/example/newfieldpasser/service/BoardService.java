@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Slf4j
@@ -302,6 +303,97 @@ public class BoardService {
 
             Slice<BoardDTO.boardResDTO> boardList =
                     boardRepository.findByTitleContainingAndCategory_CategoryIdAndDistrict_DistrictId(title, categoryId, districtId, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 날짜 + 제목 + 카테고리 + 지역
+     */
+    public ResponseEntity<?> boardListInquiryByDateAndTitleAndCategoryAndDistrict(String title, String startTime, String endTime,
+                                                                                  int categoryId, int districtId, int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDateAndTitleAndCategoryAndDistrict(title, categoryId, districtId, start, end, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 날짜 + 제목 + 카테고리
+     */
+    public ResponseEntity<?> boardListInquiryByDateAndTitleAndCategory(String title, String startTime, String endTime,
+                                                                       int categoryId, int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDateAndTitleAndCategory(title, categoryId, start, end, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 날짜 + 제목 + 지역
+     */
+    public ResponseEntity<?> boardListInquiryByDateAndTitleAndDistrict(String title, String startTime, String endTime,
+                                                                       int districtId, int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDateAndTitleAndDistrict(title, districtId, start, end, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 날짜  + 제목으로 검색
+     */
+    public ResponseEntity<?> boardListInquiryByDateAndTitle(String title, String startTime, String endTime, int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDateAndTitle(title, start, end, pageRequest)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
