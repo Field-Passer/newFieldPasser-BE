@@ -90,4 +90,13 @@ public class MemberController {
     public ResponseEntity<?> dupeEmailCheck(@RequestBody AuthDTO.SignupDto signupDto){
         return memberService.dupeEmailCheck(signupDto);
     }
+
+    /*
+     내가 작성한 글 조회
+    */
+
+    @GetMapping("/my-page/post-inquiry")
+    public ResponseEntity<?> selectMyPost(Authentication authentication){
+        return memberService.selectMyPost(authentication);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.newfieldpasser.repository;
 
 import com.example.newfieldpasser.entity.Board;
+import com.example.newfieldpasser.entity.Member;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -8,7 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.Authentication;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
@@ -57,4 +60,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("update Board b set b.wishCount = b.wishCount - 1 where b.boardId = :boardId")
     void minusWishCount(@Param("boardId") long boardId);
 
+    List<Board> findByMember_MemberId(String memberId);
 }

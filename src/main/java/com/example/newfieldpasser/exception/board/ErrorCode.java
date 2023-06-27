@@ -12,6 +12,7 @@ public enum ErrorCode {
     BOARD_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "BoardList Inquiry Failed!"),
     REGISTER_WISH_BOARD_FAIL(HttpStatus.BAD_REQUEST, "Register WishBoard Failed!"),
     WISH_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "WishList Inquiry Failed!"),
+
     WISH_BOARD_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Delete WishBoard Failed!"),
     REGISTER_QUESTION_FAIL(HttpStatus.BAD_REQUEST, "Register Question Failed!"),
     QUESTION_LIST_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "QuestionList Inquiry Failed!"),
@@ -20,6 +21,7 @@ public enum ErrorCode {
     REGISTER_ANSWER_FAIL(HttpStatus.BAD_REQUEST, "Register Answer Failed!"),
     ALREADY_EXIST_ANSWER(HttpStatus.CONFLICT, "Already Exist Answer!"),
     ANSWER_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "Answer Inquiry Failed!");
+
     private final HttpStatus status;
     private final String message;
 }
