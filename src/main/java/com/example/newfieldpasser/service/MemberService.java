@@ -1,11 +1,15 @@
 package com.example.newfieldpasser.service;
 
 import com.example.newfieldpasser.dto.AuthDTO;
+import com.example.newfieldpasser.dto.BoardDTO;
 import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.dto.Response;
+import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Member;
+import com.example.newfieldpasser.exception.board.BoardException;
 import com.example.newfieldpasser.exception.member.ErrorCode;
 import com.example.newfieldpasser.exception.member.MemberException;
+import com.example.newfieldpasser.repository.BoardRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +33,7 @@ public class MemberService {
     private final Response response;
     private final BCryptPasswordEncoder encoder;
 
-    private final AuthService authService;
+    private final BoardRepository boardRepository;
 
     private final MailService mailService;
 
@@ -229,5 +236,31 @@ public class MemberService {
 
                 return response.success("사용가능한 이메일 입니다");
             }
+    }
+
+    /*
+    내가 작성한 글 조회
+     */
+    public ResponseEntity<?> selectMyPost(Authentication authentication){
+        try{
+
+            String memberId = authentication.getName();
+
+                List<BoardDTO.ViewBoardDTO> list = boardRepository.findByMember_MemberId(memberId).stream()
+                        .map(BoardDTO.ViewBoardDTO::new)
+                        .collect(Collectors.toList());
+
+                if (list.isEmpty()){
+                    return response.fail("내가 작성한 글이 없습니다");
+
+                }else{
+
+                    return response.success(list,"관심글 조회 성공");
+                }
+
+        }catch(MemberException e){
+            e.printStackTrace();
+            throw new MemberException(ErrorCode.BOARD_LIST_FAIL);
+        }
     }
 }

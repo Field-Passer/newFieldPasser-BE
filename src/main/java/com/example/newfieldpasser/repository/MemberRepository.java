@@ -13,6 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Modifying
     void deleteByMemberId(String memberId);
 
-    // 이메일 중복검사
 
 }
