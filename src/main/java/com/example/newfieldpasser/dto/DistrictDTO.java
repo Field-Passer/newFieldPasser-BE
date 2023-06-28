@@ -6,7 +6,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class DistrictDTO {
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class DistrictReqDTO {
+        private List<Integer> districtIds;
+    }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

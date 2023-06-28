@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
@@ -33,10 +33,15 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Slice<Board> findByCategory_CategoryId(int categoryId, PageRequest pageRequest);
 
     @EntityGraph(attributePaths = {"member","category","district"})
-    Slice<Board> findByDistrict_DistrictId(int districtId, PageRequest pageRequest);
+    @Query("select b from Board b " +
+            "where b.district.districtId IN (:districtIds)")
+    Slice<Board> findByDistricts(@Param("districtIds") List<Integer> districtIds, PageRequest pageRequest);
 
     @EntityGraph(attributePaths = {"member","category","district"})
-    Slice<Board> findByCategory_CategoryIdAndDistrict_DistrictId(int categoryId, int districtId, PageRequest pageRequest);
+    @Query("select b from Board b " +
+            "where b.category.categoryId =:categoryId " +
+            "and b.district.districtId IN (:districtIds)")
+    Slice<Board> findByCategoryAndDistricts(@Param("categoryId") int categoryId, @Param("districtIds") List<Integer> districtIds, PageRequest pageRequest);
 
     @EntityGraph(attributePaths = {"member","category","district"})
     Slice<Board> findByTitleContaining(String title, PageRequest pageRequest);
@@ -45,23 +50,30 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Slice<Board> findByTitleContainingAndCategory_CategoryId(String title, int categoryId, PageRequest pageRequest);
 
     @EntityGraph(attributePaths = {"member","category","district"})
-    Slice<Board> findByTitleContainingAndDistrict_DistrictId(String title, int districtId, PageRequest pageRequest);
-
-    @EntityGraph(attributePaths = {"member","category","district"})
-    Slice<Board> findByTitleContainingAndCategory_CategoryIdAndDistrict_DistrictId(String title,
-                                                                                   int categoryId,
-                                                                                   int districtId,
-                                                                                   PageRequest pageRequest);
+    @Query("select b from Board b " +
+            "where b.title like %:title% " +
+            "and b.district.districtId IN (:districtIds)")
+    Slice<Board> findByTitleAndDistricts(@Param("title") String title, @Param("districtIds") List<Integer> districtIds, PageRequest pageRequest);
 
     @EntityGraph(attributePaths = {"member","category","district"})
     @Query("select b from Board b " +
             "where b.title like %:title% " +
             "and b.category.categoryId = :categoryId " +
-            "and b.district.districtId = :districtId " +
+            "and b.district.districtId IN (:districtIds)")
+    Slice<Board> findByTitleAndCategoryAndDistricts(@Param("title") String title,
+                                                    @Param("categoryId") int categoryId,
+                                                    @Param("districtIds") List<Integer> districtIds,
+                                                    PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    @Query("select b from Board b " +
+            "where b.title like %:title% " +
+            "and b.category.categoryId = :categoryId " +
+            "and b.district.districtId IN (:districtIds) " +
             "and b.startTime between :startTime and :endTime " +
             "and b.endTime between :startTime and :endTime")
-    Slice<Board> findByDateAndTitleAndCategoryAndDistrict(@Param("title") String title, @Param("categoryId") int categoryId,
-                                                          @Param("districtId") int districtId, @Param("startTime") LocalDateTime startTime,
+    Slice<Board> findByDateAndTitleAndCategoryAndDistricts(@Param("title") String title, @Param("categoryId") int categoryId,
+                                                          @Param("districtIds") List<Integer> districtIds, @Param("startTime") LocalDateTime startTime,
                                                           @Param("endTime") LocalDateTime endTime, PageRequest pageRequest);
 
     @EntityGraph(attributePaths = {"member","category","district"})
@@ -77,10 +89,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @EntityGraph(attributePaths = {"member","category","district"})
     @Query("select b from Board b " +
             "where b.title like %:title% " +
-            "and b.district.districtId = :districtId " +
+            "and b.district.districtId IN (:districtIds) " +
             "and b.startTime between :startTime and :endTime " +
             "and b.endTime between :startTime and :endTime")
-    Slice<Board> findByDateAndTitleAndDistrict(@Param("title") String title, @Param("districtId") int districtId,
+    Slice<Board> findByDateAndTitleAndDistricts(@Param("title") String title, @Param("districtIds") List<Integer> districtIds,
                                                @Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime,
                                                PageRequest pageRequest);
 
