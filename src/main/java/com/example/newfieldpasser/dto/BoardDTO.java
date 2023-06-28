@@ -89,37 +89,5 @@ public class BoardDTO {
         }
     }
 
-    @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ViewBoardDTO{
-        private long boardId;
-        private String memberId;
-        private String memberName;
-        private String categoryName;
-        private String districtName;
-        private String title;
-        private String content;
-        private String imageUrl;
-        private TransactionStatus transactionStatus;
-        private int price;
-        private String phone;
 
-
-        public ViewBoardDTO(Board board) {
-            this.boardId = board.getBoardId();
-            this.memberId = board.getMember().getMemberId();
-            this.memberName = board.getMember().getMemberName();
-            this.categoryName = board.getCategory().getCategoryName();
-            this.districtName = board.getDistrict().getDistrictName();
-            this.title = board.getTitle();
-            this.content = board.getContent();
-            this.imageUrl = board.getImageUrl();
-            this.transactionStatus = board.getTransactionStatus();
-            this.price=board.getPrice();
-            this.phone = board.getMember().getMemberPhone();
-
-
-        }
-
-    }
 }

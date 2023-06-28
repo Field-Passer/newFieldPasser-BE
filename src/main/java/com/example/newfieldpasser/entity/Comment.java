@@ -40,4 +40,11 @@ public class Comment {
     @UpdateTimestamp
     @Column(name = "comment_update_date")
     private LocalDateTime commentUpdateDate;
+
+    public void updateComment(Member member, Board board,String commentContent,LocalDateTime commentUpdateDate){
+        this.member = member;
+        this.board = board;
+        this.commentContent =commentContent;
+        this.commentUpdateDate= commentUpdateDate;
+    }
 }
