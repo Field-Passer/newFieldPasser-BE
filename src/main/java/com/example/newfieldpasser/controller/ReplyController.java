@@ -14,7 +14,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     /*
-    댓글 등록
+    답글 등록
      */
     @PostMapping("/reply/write")
     public ResponseEntity<?> registerReply(Authentication authentication, @RequestBody ReplyDTO.replyReqDTO replyReqDTO){
@@ -22,11 +22,26 @@ public class ReplyController {
     }
 
      /*
-    댓글 수정
+    답글 수정
      */
     @PutMapping("/reply/edit/{replyId}")
     public ResponseEntity<?> updateReply(@PathVariable long replyId, @RequestBody ReplyDTO.replyUpdateDTO replyUpdateDTO){
         return replyService.updateReply(replyId,replyUpdateDTO);
     }
 
+      /*
+    답글 삭제
+     */
+    @DeleteMapping("/reply/delete/{replyId}")
+    public ResponseEntity<?> deleteReply(@PathVariable long replyId){
+        return replyService.deleteReply(replyId);
+    }
+
+     /*
+    답글 조회
+     */
+    @GetMapping("/reply/{commentId}/{page}")
+    public ResponseEntity<?> replyListInquiryByComment(@PathVariable long commentId, @PathVariable int page){
+        return replyService.replyListInquiryByComment(commentId,page);
+    }
 }

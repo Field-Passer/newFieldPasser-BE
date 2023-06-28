@@ -13,6 +13,9 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -66,4 +69,35 @@ public class ReplyService {
             throw new ReplyException(ErrorCode.Reply_EDIT_FAIL);
         }
     }
+
+       /*
+        답글 삭제
+     */
+
+    @Transactional
+    public ResponseEntity<?> deleteReply(long replyId){
+        try{
+            replyRepository.deleteByReplyId(replyId);
+            return response.success("Reply Delete Success");
+        }catch (ReplyException e) {
+            e.printStackTrace();
+            throw new ReplyException(ErrorCode.Reply_DELETE_FAIL);
+        }
+    }
+
+     /*
+        답글 조회
+     */
+    public ResponseEntity<?> replyListInquiryByComment(long commentId, int page){
+        try{
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "replyRegisterDate"));
+            Slice<ReplyDTO.replyResDTO> replyList= replyRepository.findByComment_CommentId(commentId,pageRequest).map(ReplyDTO.replyResDTO :: new);
+
+            return response.success(replyList,"Reply Inquiry Success");
+        }catch (ReplyException e) {
+            e.printStackTrace();
+            throw new ReplyException(ErrorCode.Reply_INQUIRY_DETAIL_FAIL);
+        }
+    }
+
 }
