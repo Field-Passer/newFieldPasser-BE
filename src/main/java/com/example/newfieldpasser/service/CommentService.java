@@ -12,6 +12,7 @@ import com.example.newfieldpasser.repository.CommentRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -85,5 +86,20 @@ public class CommentService {
             throw new CommentException(ErrorCode.COMMENT_DELETE_FAIL);
         }
 
+    }
+
+    /*
+      댓글 조회 - 게시글별
+     */
+    public ResponseEntity<?> commentListInquiryByBoard(long boardId){
+        try{
+
+            Slice<CommentDTO.commentResDTO> commentList= commentRepository.findByBoard_BoardId(boardId).map(CommentDTO.commentResDTO::new);
+
+            return response.success(commentList,"Comment Inquiry Success");
+        }catch (CommentException e){
+            e.printStackTrace();
+            throw new CommentException(ErrorCode.COMMENT_INQUIRY_DETAIL_FAIL);
+        }
     }
 }

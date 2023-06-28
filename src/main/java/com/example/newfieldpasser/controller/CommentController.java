@@ -38,4 +38,12 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable long commentId){
         return commentService.deleteComment(commentId);
     }
+
+     /*
+    댓글 조회
+     */
+    @GetMapping("/comment/{boardId}")
+    public ResponseEntity<?> commentListInquiryByBoard(@PathVariable long boardId){
+        return commentService.commentListInquiryByBoard(boardId);
+    }
 }
