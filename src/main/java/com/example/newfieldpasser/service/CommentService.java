@@ -95,7 +95,7 @@ public class CommentService {
      */
     public ResponseEntity<?> commentListInquiryByBoard(long boardId ,int page ){
         try{
-            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "commentRegisterDate"));
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "commentRegisterDate"));
             Slice<CommentDTO.commentResDTO> commentList= commentRepository.findByBoard_BoardId(boardId,pageRequest).map(CommentDTO.commentResDTO::new);
 
             return response.success(commentList,"Comment Inquiry Success");
