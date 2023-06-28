@@ -3,6 +3,7 @@ package com.example.newfieldpasser.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.newfieldpasser.dto.BoardDTO;
+import com.example.newfieldpasser.dto.DistrictDTO;
 import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Category;
@@ -28,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -197,13 +199,14 @@ public class BoardService {
     /*
     게시글 리스트 조회 - 지역별
      */
-    public ResponseEntity<?> boardListInquiryByDistrict(int districtId, int page) {
+    public ResponseEntity<?> boardListInquiryByDistrict(DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
         try {
 
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
             Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findByDistrict_DistrictId(districtId, pageRequest).map(BoardDTO.boardResDTO::new);
+                    boardRepository.findByDistricts(districtIds, pageRequest).map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -216,13 +219,14 @@ public class BoardService {
     /*
     게시글 리스트 조회 - 카테고리 + 지역
      */
-    public ResponseEntity<?> boardListInquiryByCategoryAndDistrict(int categoryId, int districtId, int page) {
+    public ResponseEntity<?> boardListInquiryByCategoryAndDistrict(int categoryId, DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
         try {
 
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
             Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findByCategory_CategoryIdAndDistrict_DistrictId(categoryId, districtId, pageRequest)
+                    boardRepository.findByCategoryAndDistricts(categoryId, districtIds, pageRequest)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
@@ -262,7 +266,7 @@ public class BoardService {
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
             Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findByTitleContainingAndCategory_CategoryId(title,categoryId,pageRequest)
+                    boardRepository.findByTitleContainingAndCategory_CategoryId(title, categoryId, pageRequest)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
@@ -276,13 +280,14 @@ public class BoardService {
     /*
     게시글 리스트 조회 - 제목 + 지역
      */
-    public ResponseEntity<?> boardListInquiryByTitleAndDistrict(String title, int districtId, int page) {
+    public ResponseEntity<?> boardListInquiryByTitleAndDistrict(String title, DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
         try {
 
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
             Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findByTitleContainingAndDistrict_DistrictId(title,districtId,pageRequest)
+                    boardRepository.findByTitleAndDistricts(title, districtIds, pageRequest)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
@@ -296,13 +301,14 @@ public class BoardService {
     /*
     게시글 리스트 조회 - 제목 + 카테고리 + 지역
      */
-    public ResponseEntity<?> boardListInquiryByTitleAndCategoryAndDistrict(String title, int categoryId, int districtId, int page) {
+    public ResponseEntity<?> boardListInquiryByTitleAndCategoryAndDistrict(String title, int categoryId, DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
         try {
 
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
             Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findByTitleContainingAndCategory_CategoryIdAndDistrict_DistrictId(title, categoryId, districtId, pageRequest)
+                    boardRepository.findByTitleAndCategoryAndDistricts(title, categoryId, districtIds, pageRequest)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
@@ -317,15 +323,16 @@ public class BoardService {
     게시글 리스트 조회 - 날짜 + 제목 + 카테고리 + 지역
      */
     public ResponseEntity<?> boardListInquiryByDateAndTitleAndCategoryAndDistrict(String title, String startTime, String endTime,
-                                                                                  int categoryId, int districtId, int page) {
+                                                                                  int categoryId, DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
         try {
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
             Slice<BoardDTO.boardResDTO> boardList =
                     boardRepository
-                            .findByDateAndTitleAndCategoryAndDistrict(title, categoryId, districtId, start, end, pageRequest)
+                            .findByDateAndTitleAndCategoryAndDistricts(title, categoryId, districtIds, start, end, pageRequest)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
@@ -363,15 +370,16 @@ public class BoardService {
     게시글 리스트 조회 - 날짜 + 제목 + 지역
      */
     public ResponseEntity<?> boardListInquiryByDateAndTitleAndDistrict(String title, String startTime, String endTime,
-                                                                       int districtId, int page) {
+                                                                       DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
         try {
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
             Slice<BoardDTO.boardResDTO> boardList =
                     boardRepository
-                            .findByDateAndTitleAndDistrict(title, districtId, start, end, pageRequest)
+                            .findByDateAndTitleAndDistricts(title, districtIds, start, end, pageRequest)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");

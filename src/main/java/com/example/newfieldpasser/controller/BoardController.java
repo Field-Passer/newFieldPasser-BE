@@ -1,6 +1,7 @@
 package com.example.newfieldpasser.controller;
 
 import com.example.newfieldpasser.dto.BoardDTO;
+import com.example.newfieldpasser.dto.DistrictDTO;
 import com.example.newfieldpasser.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -80,22 +82,22 @@ public class BoardController {
     /*
     게시글 리스트 조회 - 지역별
      */
-    @GetMapping("/board/list/district/{districtId}/{page}")
-    public ResponseEntity<?> boardListInquiryByDistrict(@PathVariable int districtId,
+    @GetMapping("/board/list/district/{page}")
+    public ResponseEntity<?> boardListInquiryByDistrict(@RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
                                                         @PathVariable int page) {
 
-        return boardService.boardListInquiryByDistrict(districtId, page);
+        return boardService.boardListInquiryByDistrict(districtReqDTO, page);
     }
 
     /*
     게시글 리스트 조회 - 카테고리 + 지역
      */
-    @GetMapping("/board/list/category-district/{categoryId}/{districtId}/{page}")
+    @GetMapping("/board/list/category-district/{categoryId}/{page}")
     public ResponseEntity<?> boardListInquiryByCategoryAndDistrict(@PathVariable int categoryId,
-                                                                   @PathVariable int districtId,
+                                                                   @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
                                                                    @PathVariable int page) {
 
-        return boardService.boardListInquiryByCategoryAndDistrict(categoryId, districtId, page);
+        return boardService.boardListInquiryByCategoryAndDistrict(categoryId, districtReqDTO, page);
     }
 
     /*
@@ -122,38 +124,38 @@ public class BoardController {
     /*
     게시글 리스트 제목 + 지역으로 검색
      */
-    @GetMapping("/board/search-title-district/{districtId}/{page}")
+    @GetMapping("/board/search-title-district/{page}")
     public ResponseEntity<?> boardListInquiryByTitleAndDistrict(@RequestParam(name = "title") String title,
-                                                                @PathVariable int districtId,
+                                                                @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
                                                                 @PathVariable int page) {
 
-        return boardService.boardListInquiryByTitleAndDistrict(title, districtId, page);
+        return boardService.boardListInquiryByTitleAndDistrict(title, districtReqDTO, page);
     }
 
     /*
     게시글 리스트 제목 + 카테고리 + 지역으로 검색
      */
-    @GetMapping("/board/search-title-category-district/{categoryId}/{districtId}/{page}")
+    @GetMapping("/board/search-title-category-district/{categoryId}/{page}")
     public ResponseEntity<?> boardListInquiryByTitleAndCategoryAndDistrict(@RequestParam(name = "title") String title,
                                                                            @PathVariable int categoryId,
-                                                                           @PathVariable int districtId,
+                                                                           @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
                                                                            @PathVariable int page) {
 
-        return boardService.boardListInquiryByTitleAndCategoryAndDistrict(title, categoryId, districtId, page);
+        return boardService.boardListInquiryByTitleAndCategoryAndDistrict(title, categoryId, districtReqDTO, page);
     }
 
     /*
     게시글 리스트 날짜 + 제목 + 카테고리 + 지역으로 검색
      */
-    @GetMapping("/board/date/search-title-category-district/{categoryId}/{districtId}/{page}")
+    @GetMapping("/board/date/search-title-category-district/{categoryId}/{page}")
     public ResponseEntity<?> boardListInquiryByDateAndTitleAndCategoryAndDistrict(@RequestParam(name = "title") String title,
                                                                                   @RequestParam(name = "startTime") String startTime,
                                                                                   @RequestParam(name = "endTime") String endTime,
+                                                                                  @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
                                                                                   @PathVariable int categoryId,
-                                                                                  @PathVariable int districtId,
                                                                                   @PathVariable int page) {
 
-        return boardService.boardListInquiryByDateAndTitleAndCategoryAndDistrict(title,startTime,endTime,categoryId,districtId,page);
+        return boardService.boardListInquiryByDateAndTitleAndCategoryAndDistrict(title,startTime,endTime,categoryId,districtReqDTO,page);
     }
 
     /*
@@ -170,16 +172,16 @@ public class BoardController {
     }
 
     /*
-    게시글 리스트 날짜 + 제목 + 카테고리로 검색
+    게시글 리스트 날짜 + 제목 + 지역으로 검색
      */
-    @GetMapping("/board/date/search-title-district/{districtId}/{page}")
+    @GetMapping("/board/date/search-title-district/{page}")
     public ResponseEntity<?> boardListInquiryByDateAndTitleAndDistrict(@RequestParam(name = "title") String title,
                                                                        @RequestParam(name = "startTime") String startTime,
                                                                        @RequestParam(name = "endTime") String endTime,
-                                                                       @PathVariable int districtId,
+                                                                       @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
                                                                        @PathVariable int page) {
 
-        return boardService.boardListInquiryByDateAndTitleAndDistrict(title,startTime,endTime,districtId,page);
+        return boardService.boardListInquiryByDateAndTitleAndDistrict(title,startTime,endTime,districtReqDTO,page);
     }
 
     /*
