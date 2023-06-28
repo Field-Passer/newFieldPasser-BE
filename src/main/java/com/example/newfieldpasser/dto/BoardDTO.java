@@ -88,4 +88,6 @@ public class BoardDTO {
             this.deleteCheck = board.isDeleteCheck();
         }
     }
+
+
 }

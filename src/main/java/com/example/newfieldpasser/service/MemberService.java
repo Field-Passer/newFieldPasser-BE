@@ -1,20 +1,30 @@
 package com.example.newfieldpasser.service;
 
 import com.example.newfieldpasser.dto.AuthDTO;
+import com.example.newfieldpasser.dto.BoardDTO;
 import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.dto.Response;
+import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Member;
+import com.example.newfieldpasser.exception.board.BoardException;
 import com.example.newfieldpasser.exception.member.ErrorCode;
 import com.example.newfieldpasser.exception.member.MemberException;
+import com.example.newfieldpasser.repository.BoardRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +35,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final Response response;
     private final BCryptPasswordEncoder encoder;
+
+    private final BoardRepository boardRepository;
+
 
     private final MailService mailService;
 
@@ -227,6 +240,7 @@ public class MemberService {
     }
 
     /*
+<<<<<<< HEAD
     관리자 승격
      */
     @Transactional
@@ -259,6 +273,33 @@ public class MemberService {
         } catch (MemberException e) {
             log.error("관리자 승격 실패!");
             throw new MemberException(ErrorCode.UPDATE_FAIL);
+        }
+    }
+
+     /*
+    내가 작성한 글 조회
+     */
+    public ResponseEntity<?> selectMyPost(Authentication authentication,int page){
+        try{
+
+            String memberId = authentication.getName();
+
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+                Slice<BoardDTO.boardResDTO> myBoardList = boardRepository.findByMember_MemberId(memberId,pageRequest).map(BoardDTO.boardResDTO::new);
+
+
+                if (myBoardList.isEmpty()){
+                    return response.success(myBoardList,"내가 작성한 글이 없습니다");
+
+                }else{
+
+                    return response.success(myBoardList,"관심글 조회 성공");
+                }
+
+        }catch(MemberException e){
+            e.printStackTrace();
+            throw new MemberException(ErrorCode.BOARD_LIST_FAIL);
+
         }
     }
 }
