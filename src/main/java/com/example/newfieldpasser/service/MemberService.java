@@ -14,6 +14,7 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final Response response;
     private final BCryptPasswordEncoder encoder;
-    
+
     private final BoardRepository boardRepository;
 
 
@@ -281,16 +282,15 @@ public class MemberService {
 
             String memberId = authentication.getName();
 
-                List<BoardDTO.ViewBoardDTO> list = boardRepository.findByMember_MemberId(memberId).stream()
-                        .map(BoardDTO.ViewBoardDTO::new)
-                        .collect(Collectors.toList());
+                Slice<BoardDTO.boardResDTO> myBoardList = boardRepository.findByMember_MemberId(memberId).map(BoardDTO.boardResDTO::new);
 
-                if (list.isEmpty()){
-                    return response.fail("내가 작성한 글이 없습니다");
+
+                if (myBoardList.isEmpty()){
+                    return response.success(myBoardList,"내가 작성한 글이 없습니다");
 
                 }else{
 
-                    return response.success(list,"관심글 조회 성공");
+                    return response.success(myBoardList,"관심글 조회 성공");
                 }
 
         }catch(MemberException e){
