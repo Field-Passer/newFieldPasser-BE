@@ -45,4 +45,10 @@ public class ReplyDTO {
             this.replyUpdateDate = reply.getReplyUpdateDate();
         }
     }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class replyUpdateDTO{
+        private String replyContent;
+    }
 }

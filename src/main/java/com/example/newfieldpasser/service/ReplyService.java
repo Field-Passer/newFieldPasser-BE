@@ -5,6 +5,8 @@ import com.example.newfieldpasser.dto.ReplyDTO;
 import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Comment;
 import com.example.newfieldpasser.entity.Member;
+import com.example.newfieldpasser.entity.Reply;
+import com.example.newfieldpasser.exception.reply.ErrorCode;
 import com.example.newfieldpasser.exception.reply.ReplyException;
 import com.example.newfieldpasser.repository.CommentRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
@@ -44,6 +46,24 @@ public class ReplyService {
         }catch (Exception e){
             e.printStackTrace();
             return response.fail("Fail register Reply");
+        }
+    }
+
+     /*
+    답글 수정
+     */
+
+    @Transactional
+    public ResponseEntity<?> updateReply(long replyId, ReplyDTO.replyUpdateDTO replyUpdateDTO){
+        try{
+            Reply reply = replyRepository.findByReplyId(replyId).get();
+
+            reply.updateReply(replyUpdateDTO.getReplyContent());
+
+            return response.success("Edit Reply Success");
+        }catch (ReplyException e) {
+            e.printStackTrace();
+            throw new ReplyException(ErrorCode.Reply_EDIT_FAIL);
         }
     }
 }
