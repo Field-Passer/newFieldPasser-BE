@@ -1,7 +1,6 @@
 package com.example.newfieldpasser.entity;
 
 import com.example.newfieldpasser.dto.AuthDTO;
-import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.parameter.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -65,6 +64,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<WishBoard> wishBoardList;
 
+    @OneToMany(mappedBy = "member")
+    private List<Reply> replyList;
     // == 생성 메서드 == //
     public static Member registerUser(AuthDTO.SignupDto signupDto) {
         Member member = new Member();

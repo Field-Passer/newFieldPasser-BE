@@ -9,44 +9,38 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
 @Entity
-@Table(name = "comment")
-public class Comment {
+@Table(name = "reply")
+public class Reply {
+
     @Id
-    @Column(name = "comment_id")
+    @Column(name = "reply_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long commentId;
+    private long replyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 
-    @Column(name = "comment_content", nullable = false)
-    private String commentContent;
+    @Column(name = "reply-content",nullable = false)
+    private String replyContent;
 
     @CreationTimestamp
-    @Column(name = "comment_register_date")
-    private LocalDateTime commentRegisterDate;
+    @Column(name="reply_register_date")
+    private LocalDateTime replyRegisterDate;
 
     @UpdateTimestamp
-    @Column(name = "comment_update_date")
-    private LocalDateTime commentUpdateDate;
+    @Column(name = "reply_update_date")
+    private LocalDateTime replyUpdateDate;
 
-    @OneToMany(mappedBy = "comment")
-    private List<Reply> replyList;
-    public void updateComment(String commentContent){
 
-        this.commentContent =commentContent;
-
-    }
 }
