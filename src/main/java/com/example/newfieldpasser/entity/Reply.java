@@ -21,7 +21,7 @@ public class Reply {
     @Id
     @Column(name = "reply_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long replyId;
+    private int replyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -31,7 +31,7 @@ public class Reply {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @Column(name = "reply-content",nullable = false)
+    @Column(name = "reply_content",nullable = false)
     private String replyContent;
 
     @CreationTimestamp
