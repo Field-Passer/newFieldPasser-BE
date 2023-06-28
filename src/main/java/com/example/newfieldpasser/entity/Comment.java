@@ -41,10 +41,9 @@ public class Comment {
     @Column(name = "comment_update_date")
     private LocalDateTime commentUpdateDate;
 
-    public void updateComment(Member member, Board board,String commentContent,LocalDateTime commentUpdateDate){
-        this.member = member;
-        this.board = board;
+    public void updateComment(String commentContent){
+
         this.commentContent =commentContent;
-        this.commentUpdateDate= commentUpdateDate;
+
     }
 }

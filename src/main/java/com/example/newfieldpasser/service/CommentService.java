@@ -30,6 +30,9 @@ public class CommentService {
 
 
 
+    /*
+        댓글 생성
+     */
     @Transactional
     public ResponseEntity<?> registerComment (Authentication authentication, CommentDTO.commentReqDTO commentReqDTO){
         try{
@@ -47,16 +50,17 @@ public class CommentService {
 
     }
 
+    /*
+       댓글 수정
+    */
     @Transactional
-    public ResponseEntity<?> updateComment(long commentId,Authentication authentication, CommentDTO.commentUpdateDTO commentUpdateDTO){
+    public ResponseEntity<?> updateComment(long commentId, CommentDTO.commentUpdateDTO commentUpdateDTO){
         try{
 
             Comment comment = commentRepository.findByCommentId(commentId).get();
-            Member member = memberRepository.findByMemberId(authentication.getName()).get();
-            Board board = boardRepository.findByBoardId(commentUpdateDTO.getBoardId()).get();
 
-            comment.updateComment(member,board, commentUpdateDTO.getCommentContent(),
-                                    commentUpdateDTO.getCommentUpdateDate());
+
+            comment.updateComment( commentUpdateDTO.getCommentContent());
 
             return response.success("Edit Comment Success");
         }catch (CommentException e){
@@ -65,4 +69,21 @@ public class CommentService {
         }
     }
 
+
+     /*
+        댓글 삭제
+     */
+
+    @Transactional
+    public ResponseEntity<?> deleteComment(long commentId ){
+        try{
+
+            commentRepository.deleteByCommentId(commentId);
+            return response.success("Comment Delete Success");
+        }catch (CommentException e){
+            e.printStackTrace();
+            throw new CommentException(ErrorCode.COMMENT_DELETE_FAIL);
+        }
+
+    }
 }

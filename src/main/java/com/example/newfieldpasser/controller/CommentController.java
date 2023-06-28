@@ -27,7 +27,15 @@ public class CommentController {
     댓글 수정
      */
     @PutMapping("/comment/edit/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable long commentId, Authentication authentication, @RequestBody CommentDTO.commentUpdateDTO commentUpdateDTO){
-        return commentService.updateComment(commentId,authentication,commentUpdateDTO);
+    public ResponseEntity<?> updateComment(@PathVariable long commentId, @RequestBody CommentDTO.commentUpdateDTO commentUpdateDTO){
+        return commentService.updateComment(commentId,commentUpdateDTO);
+    }
+
+    /*
+    댓글 삭제
+     */
+    @DeleteMapping("/comment/delete/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable long commentId){
+        return commentService.deleteComment(commentId);
     }
 }
