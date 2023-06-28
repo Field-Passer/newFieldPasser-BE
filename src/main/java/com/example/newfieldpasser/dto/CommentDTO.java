@@ -48,14 +48,9 @@ public class CommentDTO {
     }
 
     @Getter
-    @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class commentUpdateDTO{
         private String commentContent;
-        private long boardId;
-
-        private LocalDateTime commentUpdateDate;
-
 
     }
 }

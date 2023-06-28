@@ -14,7 +14,9 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -277,12 +279,13 @@ public class MemberService {
      /*
     내가 작성한 글 조회
      */
-    public ResponseEntity<?> selectMyPost(Authentication authentication){
+    public ResponseEntity<?> selectMyPost(Authentication authentication,int page){
         try{
 
             String memberId = authentication.getName();
 
-                Slice<BoardDTO.boardResDTO> myBoardList = boardRepository.findByMember_MemberId(memberId).map(BoardDTO.boardResDTO::new);
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+                Slice<BoardDTO.boardResDTO> myBoardList = boardRepository.findByMember_MemberId(memberId,pageRequest).map(BoardDTO.boardResDTO::new);
 
 
                 if (myBoardList.isEmpty()){

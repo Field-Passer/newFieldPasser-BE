@@ -1,6 +1,7 @@
 package com.example.newfieldpasser.repository;
 
 import com.example.newfieldpasser.entity.Comment;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,5 +14,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> deleteByCommentId(long commentId);
 
-    Slice<Comment> findByBoard_BoardId(long boardId);
+    Slice<Comment> findByBoard_BoardId(long boardId , PageRequest pageRequest);
 }

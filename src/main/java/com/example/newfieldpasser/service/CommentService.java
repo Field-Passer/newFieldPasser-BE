@@ -12,7 +12,9 @@ import com.example.newfieldpasser.repository.CommentRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -91,10 +93,10 @@ public class CommentService {
     /*
       댓글 조회 - 게시글별
      */
-    public ResponseEntity<?> commentListInquiryByBoard(long boardId){
+    public ResponseEntity<?> commentListInquiryByBoard(long boardId ,int page ){
         try{
-
-            Slice<CommentDTO.commentResDTO> commentList= commentRepository.findByBoard_BoardId(boardId).map(CommentDTO.commentResDTO::new);
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "commentRegisterDate"));
+            Slice<CommentDTO.commentResDTO> commentList= commentRepository.findByBoard_BoardId(boardId,pageRequest).map(CommentDTO.commentResDTO::new);
 
             return response.success(commentList,"Comment Inquiry Success");
         }catch (CommentException e){

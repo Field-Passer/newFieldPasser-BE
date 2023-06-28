@@ -95,8 +95,8 @@ public class MemberController {
      내가 작성한 글 조회
     */
 
-    @GetMapping("/my-page/post-inquiry")
-    public ResponseEntity<?> selectMyPost(Authentication authentication){
-        return memberService.selectMyPost(authentication);
+    @GetMapping("/my-page/post-inquiry/{page}")
+    public ResponseEntity<?> selectMyPost(Authentication authentication, @PathVariable int page){
+        return memberService.selectMyPost(authentication,page);
     }
 }

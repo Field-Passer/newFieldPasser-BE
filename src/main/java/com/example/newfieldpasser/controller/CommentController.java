@@ -42,8 +42,8 @@ public class CommentController {
      /*
     댓글 조회
      */
-    @GetMapping("/comment/{boardId}")
-    public ResponseEntity<?> commentListInquiryByBoard(@PathVariable long boardId){
-        return commentService.commentListInquiryByBoard(boardId);
+    @GetMapping("/comment/{boardId}/{page}")
+    public ResponseEntity<?> commentListInquiryByBoard(@PathVariable long boardId, @PathVariable int page){
+        return commentService.commentListInquiryByBoard(boardId,page);
     }
 }
