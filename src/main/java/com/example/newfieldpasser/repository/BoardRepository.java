@@ -11,11 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 
-<<<<<<< HEAD
-import java.util.List;
-=======
 import java.time.LocalDateTime;
->>>>>>> 65b94abac5e1240cb4fe59c6a979ebc7bcc9c84d
+
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
