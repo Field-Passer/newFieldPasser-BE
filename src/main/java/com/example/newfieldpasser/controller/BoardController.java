@@ -195,4 +195,52 @@ public class BoardController {
 
         return boardService.boardListInquiryByDateAndTitle(title,startTime,endTime,page);
     }
+
+    /*
+    게시글 리스트 날짜만으로 검색
+     */
+    @GetMapping("/board/date/search/{page}")
+    public ResponseEntity<?> boardListInquiryByDate(@RequestParam(name = "startTime") String startTime,
+                                                    @RequestParam(name = "endTime") String endTime,
+                                                    @PathVariable int page) {
+
+        return boardService.boardListInquiryByDate(startTime, endTime, page);
+    }
+
+    /*
+    게시글 리스트 날짜 + 카테고리로 검색
+     */
+    @GetMapping("/board/date/search-category/{categoryId}/{page}")
+    public ResponseEntity<?> boardListInquiryByDateAndCategory(@RequestParam(name = "startTime") String startTime,
+                                                               @RequestParam(name = "endTime") String endTime,
+                                                               @PathVariable int categoryId,
+                                                               @PathVariable int page) {
+
+        return boardService.boardListInquiryByDateAndCategory(startTime, endTime, categoryId, page);
+    }
+
+    /*
+    게시글 리스트 날짜 + 지역(중복 선택)으로 검색
+     */
+    @GetMapping("/board/date/search-district/{page}")
+    public ResponseEntity<?> boardListInquiryByDateAndCategory(@RequestParam(name = "startTime") String startTime,
+                                                               @RequestParam(name = "endTime") String endTime,
+                                                               @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
+                                                               @PathVariable int page) {
+
+        return boardService.boardListInquiryByDateAndDistrict(startTime, endTime, districtReqDTO, page);
+    }
+
+    /*
+    게시글 리스트 날짜 + 카테고리 + 지역(중복 선택)으로 검색
+     */
+    @GetMapping("/board/date/search-category-district/{categoryId}/{page}")
+    public ResponseEntity<?> boardListInquiryByDateAndCategory(@RequestParam(name = "startTime") String startTime,
+                                                               @RequestParam(name = "endTime") String endTime,
+                                                               @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
+                                                               @PathVariable int categoryId,
+                                                               @PathVariable int page) {
+
+        return boardService.boardListInquiryByDateAndCategoryAndDistrict(startTime, endTime, districtReqDTO, categoryId, page);
+    }
 }

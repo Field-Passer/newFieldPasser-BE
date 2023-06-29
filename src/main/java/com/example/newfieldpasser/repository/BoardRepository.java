@@ -102,7 +102,39 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "and b.startTime between :startTime and :endTime " +
             "and b.endTime between :startTime and :endTime")
     Slice<Board> findByDateAndTitle(@Param("title") String title, @Param("startTime") LocalDateTime startTime,
-                                               @Param("endTime") LocalDateTime endTime, PageRequest pageRequest);
+                                    @Param("endTime") LocalDateTime endTime, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    @Query("select b from Board b " +
+            "where b.startTime between :startTime and :endTime " +
+            "and b.endTime between :startTime and :endTime")
+    Slice<Board> findByDate(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    @Query("select b from Board b " +
+            "where b.startTime between :startTime and :endTime " +
+            "and b.endTime between :startTime and :endTime " +
+            "and b.category.categoryId = :categoryId")
+    Slice<Board> findByDateAndCategory(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime,
+                                       @Param("categoryId") int categoryId, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    @Query("select b from Board b " +
+            "where b.startTime between :startTime and :endTime " +
+            "and b.endTime between :startTime and :endTime " +
+            "and b.district.districtId IN (:districtIds)")
+    Slice<Board> findByDateAndDistrict(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime,
+                                       @Param("districtIds") List<Integer> districtIds, PageRequest pageRequest);
+
+    @EntityGraph(attributePaths = {"member","category","district"})
+    @Query("select b from Board b " +
+            "where b.startTime between :startTime and :endTime " +
+            "and b.endTime between :startTime and :endTime " +
+            "and b.category.categoryId = :categoryId " +
+            "and b.district.districtId IN (:districtIds)")
+    Slice<Board> findByDateAndCategoryAndDistrict(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime,
+                                                  @Param("categoryId") int categoryId, @Param("districtIds") List<Integer> districtIds,
+                                                  PageRequest pageRequest);
 
     @Modifying
     @Query("update Board b set b.wishCount = b.wishCount + 1 where b.boardId = :boardId")
