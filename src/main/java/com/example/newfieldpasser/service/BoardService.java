@@ -411,4 +411,95 @@ public class BoardService {
             throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
         }
     }
+
+    /*
+    게시글 리스트 조회 - 날짜만으로 검색
+     */
+    public ResponseEntity<?> boardListInquiryByDate(String startTime, String endTime, int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDate(start, end, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 날짜 + 카테고리로 검색
+     */
+    public ResponseEntity<?> boardListInquiryByDateAndCategory(String startTime, String endTime, int categoryId, int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDateAndCategory(start, end, categoryId, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 날짜 + 지역(중복선택)으로 검색
+     */
+    public ResponseEntity<?> boardListInquiryByDateAndDistrict(String startTime, String endTime, DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
+        try {
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDateAndDistrict(start, end, districtIds, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
+
+    /*
+    게시글 리스트 조회 - 날짜 + 카테고리 + 지역(중복선택)으로 검색
+     */
+    public ResponseEntity<?> boardListInquiryByDateAndCategoryAndDistrict(String startTime, String endTime,
+                                                                          DistrictDTO.DistrictReqDTO districtReqDTO, int categoryId, int page) {
+        try {
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findByDateAndCategoryAndDistrict(start, end, categoryId, districtIds, pageRequest)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+    }
 }
