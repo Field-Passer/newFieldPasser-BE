@@ -21,7 +21,7 @@ public class Reply {
     @Id
     @Column(name = "reply_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int replyId;
+    private long replyId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -42,5 +42,7 @@ public class Reply {
     @Column(name = "reply_update_date")
     private LocalDateTime replyUpdateDate;
 
-
+    public void updateReply(String replyContent){
+        this.replyContent = replyContent;
+    }
 }
