@@ -66,6 +66,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<Reply> replyList;
+
     // == 생성 메서드 == //
     public static Member registerUser(AuthDTO.SignupDto signupDto) {
         Member member = new Member();
@@ -103,5 +104,11 @@ public class Member {
 
     public void changeUser() {
         this.role = Role.USER;
+    }
+
+    public Member updateName(Member member, String memberName) {
+        member.memberName = memberName;
+
+        return member;
     }
 }
