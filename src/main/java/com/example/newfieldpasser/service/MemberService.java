@@ -240,7 +240,6 @@ public class MemberService {
     }
 
     /*
-<<<<<<< HEAD
     관리자 승격
      */
     @Transactional
