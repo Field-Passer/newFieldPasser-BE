@@ -2,7 +2,9 @@ package com.example.newfieldpasser.service;
 
 import com.example.newfieldpasser.dto.AuthDTO;
 import com.example.newfieldpasser.dto.Response;
+import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.jwt.JwtTokenProvider;
+import com.example.newfieldpasser.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -26,6 +28,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RedisService redisService;
+    private final MemberRepository memberRepository;
     private final Response response;
 
     /*
@@ -180,11 +183,14 @@ public class AuthService {
 
             String requestAccessToken = resolveToken(requestAccessTokenInHeader);
             String memberId = getPrincipal(requestAccessToken);
+            Member member = memberRepository.findByMemberId(memberId).get();
+
+            String provider = member.getMemberProvider() == null ? SERVER : member.getMemberProvider(); //null이면 서버에서 저장 null이 아니면 소셜 로그인
 
             // Redis에 저장되어 있는 RT 삭제
-            String refreshTokenInRedis = redisService.getValues("RT(" + SERVER + "):" + memberId);
+            String refreshTokenInRedis = redisService.getValues("RT(" + provider + "):" + memberId);
             if (refreshTokenInRedis != null) {
-                redisService.deleteValues("RT(" + SERVER + "):" + memberId);
+                redisService.deleteValues("RT(" + provider + "):" + memberId);
             }
 
             // Redis에 로그아웃 처리한 AT 저장

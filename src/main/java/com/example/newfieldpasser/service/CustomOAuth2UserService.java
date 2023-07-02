@@ -41,7 +41,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // OAuthAttributes: OAuth2User의 attribute를 서비스 유형에 맞게 담아줄 클래스
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, originAttributes);
-        Member member = saveOrUpdate(attributes);
+        Member member = saveOrUpdate(attributes, registrationId);
         String memberId = member.getMemberId();
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(() -> member.getRole().getKey());
@@ -53,10 +53,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
      * 이미 존재하는 회원이라면 이름과 프로필이미지를 업데이트해줍니다.
      * 처음 가입하는 회원이라면 User 테이블을 생성합니다.
      **/
-    private Member saveOrUpdate(OAuthAttributes authAttributes) {
+    private Member saveOrUpdate(OAuthAttributes authAttributes, String provider) {
         Member member = memberRepository.findByMemberId(authAttributes.getEmail())
                 .map(m -> m.updateName(m, authAttributes.getName()))
-                .orElse(authAttributes.toEntity());
+                .orElse(authAttributes.toEntity(provider));
 
         return memberRepository.save(member);
     }

@@ -44,13 +44,14 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public Member toEntity() {
+    public Member toEntity(String provider) {
         return Member.builder()
                 .memberName(name)
                 .memberId(email)
                 .memberDelete(false)
                 .memberNickName(randomHangulName())
                 .role(Role.USER)
+                .memberProvider(provider)
                 .build();
     }
 
