@@ -49,6 +49,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "member_provider")
+    private String memberProvider;
+
     @OneToMany(mappedBy = "member")
     private List<Board> boardList;
 

@@ -9,6 +9,7 @@ import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.board.BoardException;
 import com.example.newfieldpasser.exception.member.ErrorCode;
 import com.example.newfieldpasser.exception.member.MemberException;
+import com.example.newfieldpasser.jwt.JwtTokenProvider;
 import com.example.newfieldpasser.repository.BoardRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
@@ -17,12 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +43,10 @@ public class MemberService {
 
 
     private final MailService mailService;
+
+    private final String SERVER = "Server";
+    private final RedisService redisService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public ResponseEntity<?> signupMember(AuthDTO.SignupDto signupDto) {
@@ -190,14 +197,33 @@ public class MemberService {
     회원탈퇴
     */
     @Transactional
-    public ResponseEntity<?> deleteMember(Authentication authentication){
+    public ResponseEntity<?> deleteMember(Authentication authentication, String requestAccessToken){
 
         try{
 
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
-            memberRepository.deleteByMemberId(member.getMemberId());
+            String memberId = member.getMemberId();
+            memberRepository.deleteByMemberId(memberId);
 
-            return response.success("Delete Member success");
+            String provider = member.getMemberProvider() == null ? SERVER : member.getMemberProvider(); //null이면 서버에서 저장 null이 아니면 소셜 로그인
+
+            // Redis에 저장되어 있는 RT 삭제
+            String refreshTokenInRedis = redisService.getValues("RT(" + provider + "):" + memberId);
+            if (refreshTokenInRedis != null) {
+                redisService.deleteValues("RT(" + provider + "):" + memberId);
+            }
+
+            // Redis에 회원탈퇴 처리한 AT 저장
+            long expiration = jwtTokenProvider.getTokenExpirationTime(requestAccessToken) - new Date().getTime();
+            redisService.setValuesWithTimeout(requestAccessToken, "delete", expiration);
+
+            // 쿠키 초기화
+            ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "")
+                    .maxAge(0)
+                    .path("/")
+                    .build();
+
+            return response.success("Delete Member success", responseCookie.toString());
 
         } catch(MemberException e) {
             e.printStackTrace();
