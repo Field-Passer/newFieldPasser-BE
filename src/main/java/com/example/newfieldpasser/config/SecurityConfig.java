@@ -3,6 +3,7 @@ package com.example.newfieldpasser.config;
 import com.example.newfieldpasser.jwt.*;
 import com.example.newfieldpasser.service.AuthService;
 import com.example.newfieldpasser.service.CustomOAuth2UserService;
+import com.example.newfieldpasser.service.MemberDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,7 @@ public class SecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final AuthService authService;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final MemberDetailsServiceImpl memberDetailsService;
 
     @Bean
     public BCryptPasswordEncoder encoder() {
@@ -86,7 +88,7 @@ public class SecurityConfig {
                 .frameOptions().sameOrigin()
 
                 .and()
-                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2MemberSuccessHandler(authService))
+                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2MemberSuccessHandler(authService,memberDetailsService))
                         .userInfoEndpoint()
                         .userService(customOAuth2UserService));
 

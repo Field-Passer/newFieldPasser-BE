@@ -3,12 +3,16 @@ package com.example.newfieldpasser.jwt;
 import com.example.newfieldpasser.dto.AuthDTO;
 import com.example.newfieldpasser.dto.OAuth2CustomUser;
 import com.example.newfieldpasser.service.AuthService;
+import com.example.newfieldpasser.service.MemberDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthService authService;
+    private final MemberDetailsServiceImpl memberDetailsService;
     private final long COOKIE_EXPIRATION = 7776000;
 
     @Override
@@ -42,6 +47,11 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, String memberId, String authorities, String registrationId) throws IOException {
+
+        UserDetails userDetails = memberDetailsService.loadUserByUsername(memberId);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         AuthDTO.TokenDto tokenDto = authService.generateToken(registrationId, memberId, authorities);
 
