@@ -30,6 +30,8 @@ public class OAuthAttributes {
     public static OAuthAttributes of(String socialName, Map<String, Object> attributes) {
         if ("google".equals(socialName)) {
             return ofGoogle("sub", attributes);
+        } else if ("naver".equals(socialName)) {
+            return ofNaver("id", attributes);
         }
 
         return null;
@@ -40,6 +42,17 @@ public class OAuthAttributes {
                 .name(String.valueOf(attributes.get("name")))
                 .email(String.valueOf(attributes.get("email")))
                 .attributes(attributes)
+                .nameAttributesKey(userNameAttributeName)
+                .build();
+    }
+
+    public static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+
+        return OAuthAttributes.builder()
+                .name(String.valueOf(response.get("name")))
+                .email(String.valueOf(response.get("email")))
+                .attributes(response)
                 .nameAttributesKey(userNameAttributeName)
                 .build();
     }
