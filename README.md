@@ -1,10 +1,10 @@
  <h1>:soccer:구장 양도 플랫폼 Field-Passer</h1>
 
 - **프로젝트 명 :** Field-Passer
-- **프로젝트 기간 :** 2023.04 - ing
+- **프로젝트 기간 :** 2023.05 - ing
 - **한줄 소개 :** 구장 양도의 불편함을 해소하기 위해 만든 구장 양도 플랫폼
-- **테이블 명세서 & ERD :
-- **API명세서 :
+- **테이블 명세서 & ERD : https://www.erdcloud.com/d/2ubg7a3ydyvbCdBHu
+- **API명세서 : https://documenter.getpostman.com/view/27850428/2s93zFXKTQ
 
 <div> <h1> 2. 프로젝트 소개 </h1> </div>
 
