@@ -77,12 +77,20 @@ public class MemberController {
     /*
     이메일 인증번호 보내기
     */
+    @PostMapping("/check-email")
+    public ResponseEntity<?> emailAuthentication(@RequestParam("memberId") String memberId){
+        return memberService.emailAuthentication(memberId);
+    }
 
     /*
-    @PostMapping("/check-email")
-    public ResponseEntity<?> emailAuthentication(@RequestBody AuthDTO.SignupDto signupDto){
-        return memberService.emailAuthentication(signupDto);
-    }*/
+    PIN 번호 확인 (일치하면 true 반환)
+     */
+    @GetMapping("/check-pin")
+    public ResponseEntity<?> checkPinNumber(@RequestParam("memberId") String memberId,
+                                            @RequestParam("pin") String pin) {
+
+        return memberService.checkPinNumber(memberId, pin);
+    }
 
 
     /*

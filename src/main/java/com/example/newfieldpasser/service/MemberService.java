@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -235,22 +236,61 @@ public class MemberService {
     /*
     이메일 인증
     */
-/*    public ResponseEntity<?> emailAuthentication(AuthDTO.SignupDto signupDto){
+    public ResponseEntity<?> emailAuthentication(String memberId){
         try{
-            log.info("이메일 : "+ signupDto.getMemberId());
-            *//** PIN CREATE **//*
-            String pinNumber = getTmpPassword();
+            log.info("이메일 인증 : "+ memberId);
+            //** PIN CREATE **//
+            String pinNumber = generatePinNumber();
 
-            *//** 메일 생성 & 전송 **//*
-            MailVo mail = mailService.createMail(pinNumber,signupDto.getMemberId());
+            //** 메일 생성 & 전송 **//
+            MailVo mail = mailService.createPinNumberMail(pinNumber, memberId);
             mailService.sendMail(mail);
+
+            //** 재전송할 수 있으니 기존 PIN이 있다면 삭제 **//
+            redisService.deleteValues("PIN NUMBER:" + memberId);
+
+            //** 인증번호 만료기간(3분) 설정하여 Redis에 저장 **//
+            redisService.setValuesWithTimeout("PIN NUMBER:" + memberId, pinNumber, 180000);
 
             return response.success("Send Email Success");
         }catch(MemberException e){
             e.printStackTrace();
             throw new MemberException(ErrorCode.SEND_EMAIL_FAIL);
         }
-    }*/
+    }
+
+    /*
+    Redis에서 PIN NUMBER 확인
+     */
+    public ResponseEntity<?> checkPinNumber(String memberId, String pin) {
+        try {
+            if (redisService.getValues("PIN NUMBER:" + memberId).equals(pin)) {
+                return response.success("PIN NUMBER가 일치합니다.");
+            } else {
+                return response.fail("PIN NUMBER가 일치하지 않습니다.");
+            }
+        } catch (NullPointerException e) {
+            return response.fail("PIN NUMBER가 존재하지 않습니다.");
+        }
+
+    }
+
+    /*
+    PIN NUMBER 생성
+     */
+    public String generatePinNumber() {
+        int length = 6;
+        String characters = "0123456789";
+        StringBuilder verificationCode = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(characters.length());
+            verificationCode.append(characters.charAt(index));
+        }
+
+        return verificationCode.toString();
+    }
 
 
     /*
