@@ -24,8 +24,7 @@ public class MailService {
 
     private static final String emailTitle = "Field-passer 이메일 인증 안내 메일 입니다";
 
-    private static final String emailMessage = "안녕하세요. Field-passer PIN NUMbER 입니다. "
-            +"\n" + "아래 인증 번호를 입력해주세요!"+"\n";
+    private static final String emailMessage = "안녕하세요. Field-passer PIN NUMBER 입니다. " + "\n" + "아래 인증 번호를 입력해주세요!" + "\n";
 
     private static final String fromAddress = "zan04259@gmail.com";
 
@@ -45,7 +44,7 @@ public class MailService {
         return mailVo;
     }
 
-    public MailVo createMail(String pinNumber, String memberId) {
+    public MailVo createPinNumberMail(String pinNumber, String memberId) {
 
         MailVo mailVo = MailVo.builder()
                 .toAddress(memberId)
