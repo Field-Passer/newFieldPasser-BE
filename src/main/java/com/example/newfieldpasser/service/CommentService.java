@@ -7,6 +7,7 @@ import com.example.newfieldpasser.entity.Comment;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.comment.CommentException;
 import com.example.newfieldpasser.exception.comment.ErrorCode;
+import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.repository.BoardRepository;
 import com.example.newfieldpasser.repository.CommentRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
@@ -102,6 +103,30 @@ public class CommentService {
         }catch (CommentException e){
             e.printStackTrace();
             throw new CommentException(ErrorCode.COMMENT_INQUIRY_DETAIL_FAIL);
+        }
+    }
+
+
+    /*
+    내 댓글 조회 - 멤버별
+    */
+
+    public ResponseEntity<?> commentListMember(Authentication authentication, int page){
+        try{
+            String memberId = authentication.getName();
+
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "commentRegisterDate"));
+            Slice<CommentDTO.commentResDTO> commentList = commentRepository.findByMember_MemberId(memberId,pageRequest).map(CommentDTO.commentResDTO :: new);
+
+            if(commentList.isEmpty()){
+                return response.success(commentList,"작성한 댓글이 없습니다.");
+            }else{
+                return response.success(commentList,"작성한 댓글을 조회 성공!");
+            }
+        }catch(CommentException e){
+            e.printStackTrace();
+            throw new CommentException(ErrorCode.MY_COMMENT_LIST_FAIL);
+
         }
     }
 }
