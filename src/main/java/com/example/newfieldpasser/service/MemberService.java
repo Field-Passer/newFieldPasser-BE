@@ -246,9 +246,6 @@ public class MemberService {
             MailVo mail = mailService.createPinNumberMail(pinNumber, memberId);
             mailService.sendMail(mail);
 
-            //** 재전송할 수 있으니 기존 PIN이 있다면 삭제 **//
-            redisService.deleteValues("PIN NUMBER:" + memberId);
-
             //** 인증번호 만료기간(3분) 설정하여 Redis에 저장 **//
             redisService.setValuesWithTimeout("PIN NUMBER:" + memberId, pinNumber, 180000);
 
