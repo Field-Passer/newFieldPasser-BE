@@ -31,10 +31,10 @@ public class MailService {
 
     /** 이메일 생성 **/
 
-    public MailVo createPassword(String tmpPassword, Authentication authentication) {
+    public MailVo createPassword(String tmpPassword, String email) {
 
         MailVo mailVo = MailVo.builder()
-                .toAddress(authentication.getName())
+                .toAddress(email)
                 .title(title)
                 .message(message + tmpPassword)
                 .fromAddress(fromAddress)

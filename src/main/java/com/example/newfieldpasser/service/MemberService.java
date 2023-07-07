@@ -115,20 +115,20 @@ public class MemberService {
     임시 비밀번호 생성, 저장, 메일 보내기
     */
     @Transactional
-    public ResponseEntity<?> sendPwdEmail(Authentication authentication){
+    public ResponseEntity<?> sendPwdEmail(String email){
 
 
         try{
 
-            log.info("이메일 : "+ authentication.getName());
+            log.info("이메일 : "+ email);
             /** 임시 비밀번호 생성 **/
             String tmpPassword = getTmpPassword();
 
             /** 임시 비밀번호 저장 **/
-            updatePasswordMail(tmpPassword,authentication);
+            updatePasswordMail(tmpPassword,email);
 
             /** 메일 생성 & 전송 **/
-            MailVo mail = mailService.createPassword(tmpPassword,authentication);
+            MailVo mail = mailService.createPassword(tmpPassword,email);
             mailService.sendMail(mail);
 
             log.info("임시 비밀번호 전송 완료");
@@ -165,9 +165,9 @@ public class MemberService {
     임시 비밀번호로 업데이트
     */
     @Transactional
-    public void updatePasswordMail(String tmpPassword ,Authentication authentication) {
+    public void updatePasswordMail(String tmpPassword ,String email) {
 
-        Member member = memberRepository.findByMemberId(authentication.getName()).get();
+        Member member = memberRepository.findByMemberId(email).get();
 
         if(member.getMemberId() == null){
             log.info("해당 이메일이 없습니다 ");
