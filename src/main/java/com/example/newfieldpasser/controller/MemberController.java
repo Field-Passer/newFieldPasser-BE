@@ -50,7 +50,7 @@ public class MemberController {
     비밀번호 찾기 - 임시 비밀번호 발급
     */
     @PostMapping("/member-temporary")
-    public ResponseEntity<?> sendPwdEmail(@RequestBody String email ){
+    public ResponseEntity<?> sendPwdEmail(@RequestParam("email") String email ){
         log.info("controller 진입");
         return memberService.sendPwdEmail(email);
     }

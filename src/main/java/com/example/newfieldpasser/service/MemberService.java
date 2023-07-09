@@ -15,6 +15,7 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.cache.spi.entry.StructuredCacheEntry;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -167,17 +168,19 @@ public class MemberService {
     @Transactional
     public void updatePasswordMail(String tmpPassword ,String email) {
 
-        Member member = memberRepository.findByMemberId(email).get();
 
-        if(member.getMemberId() == null){
-            log.info("해당 이메일이 없습니다 ");
-        } else {
+        if(memberRepository.existsById(email)){
+            Member member = memberRepository.findByMemberId(email).get();
             String encryptPassword = encoder.encode(tmpPassword);
             member.updatePassword(encryptPassword);
             log.info("임시 비밀번호 업데이트");
+        }else{
+            log.info("해당 이메일이 없습니다.");
         }
-    }
 
+
+    }
+    
     /*
     비밀번호 변경
     */
