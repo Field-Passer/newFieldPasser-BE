@@ -49,10 +49,10 @@ public class MemberController {
     /*
     비밀번호 찾기 - 임시 비밀번호 발급
     */
-    @PostMapping("/my-page/member-temporary")
-    public ResponseEntity<?> sendPwdEmail(Authentication authentication ){
+    @PostMapping("/member-temporary")
+    public ResponseEntity<?> sendPwdEmail(@RequestParam("email") String email ){
         log.info("controller 진입");
-        return memberService.sendPwdEmail(authentication);
+        return memberService.sendPwdEmail(email);
     }
 
     /*
