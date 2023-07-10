@@ -15,4 +15,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<Comment> deleteByCommentId(long commentId);
 
     Slice<Comment> findByBoard_BoardId(long boardId , PageRequest pageRequest);
+
+    Slice<Comment> findByMember_MemberId(String memberId, PageRequest pageRequest);
 }

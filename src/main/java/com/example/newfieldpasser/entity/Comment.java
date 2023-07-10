@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -41,6 +42,9 @@ public class Comment {
     @UpdateTimestamp
     @Column(name = "comment_update_date")
     private LocalDateTime commentUpdateDate;
+
+    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
+    private int replyCount;
 
     @OneToMany(mappedBy = "comment")
     private List<Reply> replyList;

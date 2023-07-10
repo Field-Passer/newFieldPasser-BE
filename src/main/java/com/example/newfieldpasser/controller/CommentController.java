@@ -46,4 +46,18 @@ public class CommentController {
     public ResponseEntity<?> commentListInquiryByBoard(@PathVariable long boardId, @PathVariable int page){
         return commentService.commentListInquiryByBoard(boardId,page);
     }
+
+    /*
+     내가 단 댓글 조회
+    */
+
+    @GetMapping("/comment/my-inquiry/{page}")
+    public ResponseEntity<?> commentListMember(Authentication authentication, @PathVariable int page){
+        return commentService.commentListMember(authentication,page);
+    }
+
+    @GetMapping("/count/{commentId}")
+    public ResponseEntity<?> replyCountByComment(@PathVariable long commentId){
+        return commentService.replyCountByComment(commentId);
+    }
 }

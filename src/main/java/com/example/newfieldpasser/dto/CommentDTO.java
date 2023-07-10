@@ -47,6 +47,9 @@ public class CommentDTO {
         }
     }
 
+
+    
+
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class commentUpdateDTO{
