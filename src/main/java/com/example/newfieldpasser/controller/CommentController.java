@@ -55,4 +55,9 @@ public class CommentController {
     public ResponseEntity<?> commentListMember(Authentication authentication, @PathVariable int page){
         return commentService.commentListMember(authentication,page);
     }
+
+    @GetMapping("/count/{commentId}")
+    public ResponseEntity<?> replyCountByComment(@PathVariable long commentId){
+        return commentService.replyCountByComment(commentId);
+    }
 }

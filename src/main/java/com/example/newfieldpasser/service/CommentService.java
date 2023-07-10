@@ -129,4 +129,19 @@ public class CommentService {
 
         }
     }
+
+    public ResponseEntity<?> replyCountByComment(long commentId ){
+        try{
+            Comment comment = commentRepository.findByCommentId(commentId).get();
+            return response.success(comment.getReplyCount(),"댓글 개수 조회 성공");
+
+        }catch (CommentException e){
+            e.printStackTrace();
+            return response.fail("댓글 개수 조회 실패");
+        }
+    }
+
+
+
+
 }
