@@ -56,8 +56,9 @@ public class AuthController {
             // RT 쿠키 저장
             ResponseCookie responseCookie = ResponseCookie.from("refresh-token", reissuedTokenDto.getRefreshToken())
                     .maxAge(COOKIE_EXPIRATION)
-                    .httpOnly(true)
+                    .httpOnly(false)
                     .secure(true)
+                    .sameSite("None")
                     .build();
 
             String RT = responseCookie.toString(); //Refresh Token
