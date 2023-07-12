@@ -62,7 +62,7 @@ public class AuthService {
             // 쿠키에 RT 저장
             HttpCookie httpCookie = ResponseCookie.from("refresh-token", tokenDto.getRefreshToken())
                     .maxAge(COOKIE_EXPIRATION)
-                    .httpOnly(false)
+                    .httpOnly(true)
                     .secure(true)
                     .sameSite("None")
                     .build();
