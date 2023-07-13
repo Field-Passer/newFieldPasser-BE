@@ -243,4 +243,20 @@ public class BoardController {
 
         return boardService.boardListInquiryByDateAndCategoryAndDistrict(startTime, endTime, districtReqDTO, categoryId, page);
     }
+
+    /*
+    게시글 리스트 검색 - 동적 쿼리 사용
+    날짜 + 제목 + 카테고리 + 지역
+     */
+    @GetMapping("/search/{page}")
+    public ResponseEntity<?> searchBoard(@RequestParam(name = "title", required = false) String title,
+                                         @RequestParam(name = "categoryName", required = false) String categoryName,
+                                         @RequestParam(name = "startTime", required = false, defaultValue = "1900-01-01T00:00:00") String startTime,
+                                         @RequestParam(name = "endTime", required = false, defaultValue = "9999-12-31T23:59:59") String endTime,
+                                         @RequestBody DistrictDTO.DistrictReqDTO districtReqDTO,
+                                         @PathVariable int page) {
+
+        return boardService.searchBoard(title, categoryName, startTime,endTime, districtReqDTO, page);
+    }
+
 }
