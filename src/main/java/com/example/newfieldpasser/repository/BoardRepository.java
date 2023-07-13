@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
     Optional<Board> findByBoardId(long boardId);
     @Modifying

@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -501,5 +502,27 @@ public class BoardService {
             log.error("게시글 리스트 조회 실패!");
             throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
         }
+    }
+
+    public ResponseEntity<?> searchBoard(String title, String categoryName, String start, String end, DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
+
+        try {
+            List<Integer> districtIds = districtReqDTO.getDistrictIds();
+            Pageable pageable = PageRequest.of(page - 1, 10);
+            LocalDateTime startTime = LocalDateTime.parse(start);
+            LocalDateTime endTime = LocalDateTime.parse(end);
+
+            Slice<BoardDTO.boardResDTO> boardList =
+                    boardRepository
+                            .findBySearchOption(pageable, title, categoryName, districtIds, startTime, endTime)
+                            .map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Board Inquiry Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
+
     }
 }
