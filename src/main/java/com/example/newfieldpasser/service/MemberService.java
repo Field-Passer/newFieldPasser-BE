@@ -198,12 +198,12 @@ public class MemberService {
     회원탈퇴
     */
     @Transactional
-    public ResponseEntity<?> deleteMember(Authentication authentication, String requestAccessToken){
+    public ResponseEntity<?> deleteMember(Authentication authentication, String requestAccessTokenInHeader){
 
         try{
-
+            String requestAccessToken = resolveToken(requestAccessTokenInHeader);
+            String memberId = authentication.getName();
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
-            String memberId = member.getMemberId();
             memberRepository.deleteByMemberId(memberId);
 
             String provider = member.getMemberProvider() == null ? SERVER : member.getMemberProvider(); //null이면 서버에서 저장 null이 아니면 소셜 로그인
@@ -231,6 +231,16 @@ public class MemberService {
             throw new MemberException(ErrorCode.DELETE_FAIL);
         }
 
+    }
+
+    /*
+     "Bearer {AT}"에서 {AT} 추출
+     */
+    public String resolveToken(String requestAccessTokenInHeader) {
+        if (requestAccessTokenInHeader != null && requestAccessTokenInHeader.startsWith("Bearer ")) {
+            return requestAccessTokenInHeader.substring(7);
+        }
+        return null;
     }
 
     /*
