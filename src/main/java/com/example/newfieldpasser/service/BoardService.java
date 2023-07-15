@@ -504,10 +504,9 @@ public class BoardService {
         }
     }
 
-    public ResponseEntity<?> searchBoard(String title, String categoryName, String start, String end, DistrictDTO.DistrictReqDTO districtReqDTO, int page) {
+    public ResponseEntity<?> searchBoard(String title, String categoryName, String start, String end, List<Integer> districtIds, int page) {
 
         try {
-            List<Integer> districtIds = districtReqDTO.getDistrictIds();
             Pageable pageable = PageRequest.of(page - 1, 10);
             LocalDateTime startTime = LocalDateTime.parse(start);
             LocalDateTime endTime = LocalDateTime.parse(end);

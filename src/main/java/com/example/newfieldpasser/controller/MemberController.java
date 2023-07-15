@@ -69,9 +69,9 @@ public class MemberController {
 
     @DeleteMapping("/my-page/withdrawal")
     public ResponseEntity<?> deleteMember(Authentication authentication,
-                                          @RequestHeader("Authorization") String requestAccessToken){
+                                          @RequestHeader("Authorization") String requestAccessTokenInHeader){
 
-        return memberService.deleteMember(authentication, requestAccessToken);
+        return memberService.deleteMember(authentication, requestAccessTokenInHeader);
     }
 
     /*
