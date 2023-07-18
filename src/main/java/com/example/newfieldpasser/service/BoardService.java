@@ -504,7 +504,7 @@ public class BoardService {
         }
     }
 
-    public ResponseEntity<?> searchBoard(String title, String categoryName, String start, String end, List<Integer> districtIds, int page) {
+    public ResponseEntity<?> searchBoard(String title, String categoryName, String start, String end, List<String> districtNames, int page) {
 
         try {
             Pageable pageable = PageRequest.of(page - 1, 10);
@@ -513,7 +513,7 @@ public class BoardService {
 
             Slice<BoardDTO.boardResDTO> boardList =
                     boardRepository
-                            .findBySearchOption(pageable, title, categoryName, districtIds, startTime, endTime)
+                            .findBySearchOption(pageable, title, categoryName, districtNames, startTime, endTime)
                             .map(BoardDTO.boardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");

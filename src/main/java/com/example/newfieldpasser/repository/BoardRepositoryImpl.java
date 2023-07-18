@@ -27,7 +27,7 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
 
     @Override
     public Slice<Board> findBySearchOption(Pageable pageable, String title, String categoryName,
-                                           List<Integer> districtIds, LocalDateTime startTime, LocalDateTime endTime) {
+                                           List<String> districtNames, LocalDateTime startTime, LocalDateTime endTime) {
 
         List<Board> boardList =
                 queryFactory
@@ -38,7 +38,7 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
                         .fetchJoin()
                         .leftJoin(board.district, district)
                         .fetchJoin()
-                        .where(eqTitle(title), eqCategoryName(categoryName), searchDateFilter(startTime, endTime), districtIdsFilter(districtIds))
+                        .where(eqTitle(title), eqCategoryName(categoryName), searchDateFilter(startTime, endTime), districtIdsFilter(districtNames))
                         .orderBy(board.registerDate.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
@@ -77,12 +77,12 @@ public class BoardRepositoryImpl extends QuerydslRepositorySupport implements Bo
     }
 
     //지역 리스트 필터
-    private BooleanExpression districtIdsFilter(List<Integer> districtIds) {
-        return districtIds != null ? Expressions.anyOf(districtIds.stream().map(this::districtIdFilter).toArray(BooleanExpression[]::new)) : null;
+    private BooleanExpression districtIdsFilter(List<String> districtNames) {
+        return districtNames != null ? Expressions.anyOf(districtNames.stream().map(this::districtIdFilter).toArray(BooleanExpression[]::new)) : null;
     }
 
-    private BooleanExpression districtIdFilter(Integer districtId) {
-        return board.district.districtId.eq(districtId);
+    private BooleanExpression districtIdFilter(String districtName) {
+        return board.district.districtName.eq(districtName);
     }
 
 }
