@@ -253,10 +253,10 @@ public class BoardController {
                                          @RequestParam(name = "categoryName", required = false) String categoryName,
                                          @RequestParam(name = "startTime", required = false, defaultValue = "1900-01-01T00:00:00") String startTime,
                                          @RequestParam(name = "endTime", required = false, defaultValue = "9999-12-31T23:59:59") String endTime,
-                                         @RequestParam(name = "districtIds", required = false) List<Integer> districtIds,
+                                         @RequestParam(name = "districtNames", required = false) List<String> districtNames,
                                          @PathVariable int page) {
 
-        return boardService.searchBoard(title, categoryName, startTime,endTime, districtIds, page);
+        return boardService.searchBoard(title, categoryName, startTime,endTime, districtNames, page);
     }
 
 }

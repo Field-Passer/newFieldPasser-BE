@@ -11,5 +11,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface BoardRepositoryCustom {
-    Slice<Board> findBySearchOption(Pageable pageable, String title, String categoryName, List<Integer> districtIds, LocalDateTime startTime, LocalDateTime endTime);
+    Slice<Board> findBySearchOption(Pageable pageable, String title, String categoryName, List<String> districtNames, LocalDateTime startTime, LocalDateTime endTime);
 }
