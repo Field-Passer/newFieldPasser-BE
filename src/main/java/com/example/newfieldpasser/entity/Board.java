@@ -63,10 +63,10 @@ public class Board {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
 
-    @Column(name = "IMAGE_URL", nullable = false)
+    @Column(name = "IMAGE_URL")
     private String imageUrl;
 
-    @Column(name = "TRANSACTION_STATUS")
+    @Column(name = "TRANSACTION_STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
     private TransactionStatus transactionStatus;
 

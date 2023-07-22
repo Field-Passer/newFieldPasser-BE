@@ -22,7 +22,7 @@ public class BoardController {
     게시글 등록
      */
     @PostMapping("/board/register")
-    public ResponseEntity<?> registerBoard(@RequestParam("file") MultipartFile file,
+    public ResponseEntity<?> registerBoard(@RequestParam(value = "file", required = false) MultipartFile file,
                                            Authentication authentication,
                                            BoardDTO.boardReqDTO boardReqDTO) {
 
