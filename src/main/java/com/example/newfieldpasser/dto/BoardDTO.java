@@ -5,6 +5,7 @@ import com.example.newfieldpasser.entity.Category;
 import com.example.newfieldpasser.entity.District;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.parameter.TransactionStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,8 +23,10 @@ public class BoardDTO {
         private String title;
         private String content;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+9")
         private LocalDateTime startTime;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "GMT+9")
         private LocalDateTime endTime;
         private TransactionStatus transactionStatus;
         private int price;

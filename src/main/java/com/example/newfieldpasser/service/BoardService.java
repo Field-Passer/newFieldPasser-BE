@@ -78,6 +78,10 @@ public class BoardService {
      */
     public String uploadPic(MultipartFile file) throws IOException {
 
+        if (file.isEmpty()) {
+            return null;
+        }
+
         UUID uuid = UUID.randomUUID(); // 중복 방지를 위한 랜덤 값
         String originalFilename = file.getOriginalFilename();
         String fullName = uuid.toString() + "_" + originalFilename;
