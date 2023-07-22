@@ -11,11 +11,6 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 public class NewFieldPasserApplication {
 
-	@PostConstruct
-	public void started() {
-		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(NewFieldPasserApplication.class, args);
 	}
