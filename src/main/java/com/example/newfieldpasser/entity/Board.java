@@ -9,6 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,6 +25,7 @@ import java.util.List;
 @Table(name = "board")
 @SQLDelete(sql = "UPDATE board SET delete_check = true, delete_date = now() WHERE board_id = ?")
 @Where(clause = "delete_check = false AND blind = false")
+@EntityListeners(AuditingEntityListener.class)
 public class Board {
     @Id
     @Column(name = "board_id")
@@ -46,11 +50,11 @@ public class Board {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @CreationTimestamp
+    @CreatedDate
     @Column(name = "register_date")
     private LocalDateTime registerDate;
 
-    @UpdateTimestamp
+    @LastModifiedDate
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
