@@ -13,7 +13,6 @@ public class NewFieldPasserApplication {
 
 	@PostConstruct
 	public void started() {
-		// timezone UTC 셋팅
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 	}
 
