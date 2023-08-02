@@ -107,9 +107,19 @@ public class BoardService {
     /*
     게시글 상세조회
      */
-    public ResponseEntity<?> boardInquiryDetail(long boardId) {
+    public ResponseEntity<?> boardInquiryDetail(long boardId, Authentication authentication) {
         try {
-            BoardDTO.boardResDTO result = boardRepository.findByBoardId(boardId).map(BoardDTO.boardResDTO::new).get();
+            BoardDTO.boardDetailResDTO result = boardRepository.findByBoardId(boardId).map(BoardDTO.boardDetailResDTO::new).get();
+
+            String loginMemberId = "";
+
+            if (authentication != null) {
+                loginMemberId = authentication.getName();
+            }
+
+            if (loginMemberId.equals(result.getMemberId())) {
+                result.setMyBoard(true);
+            }
 
             return response.success(result, "Board Inquiry Success!");
 
