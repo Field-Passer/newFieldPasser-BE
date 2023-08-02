@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -527,5 +528,16 @@ public class BoardService {
             throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
         }
 
+    }
+
+    /*
+    10분마다 양도시간이 지난 게시글들을 확인하여 블라인드 처리함
+     */
+    @Transactional
+    @Scheduled(cron = "0 0/10 * * * *")
+    public void deleteOverTime() {
+
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        boardRepository.updateTimeOverPost(nowDateTime);
     }
 }
