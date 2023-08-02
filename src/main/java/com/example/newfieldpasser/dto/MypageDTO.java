@@ -16,14 +16,14 @@ public class MypageDTO {
         private String memberName;
         private String memberNickName;
         private String memberPhone;
-        private Role role;
+        private String role;
 
         public MemberInfo(Member member){
             this.memberId = member.getMemberId();
             this.memberName = member.getMemberName();
             this.memberNickName = member.getMemberNickName();
             this.memberPhone = member.getMemberPhone();
-            this.role = member.getRole();
+            this.role = member.getRole().getTitle();
         }
     }
 
