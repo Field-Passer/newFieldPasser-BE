@@ -1,6 +1,7 @@
 package com.example.newfieldpasser.dto;
 
 import com.example.newfieldpasser.entity.Member;
+import com.example.newfieldpasser.parameter.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,12 +16,14 @@ public class MypageDTO {
         private String memberName;
         private String memberNickName;
         private String memberPhone;
+        private Role role;
 
         public MemberInfo(Member member){
             this.memberId = member.getMemberId();
             this.memberName = member.getMemberName();
             this.memberNickName = member.getMemberNickName();
             this.memberPhone = member.getMemberPhone();
+            this.role = member.getRole();
         }
     }
 
