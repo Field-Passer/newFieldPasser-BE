@@ -145,4 +145,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
     void minusWishCount(@Param("boardId") long boardId);
 
     Slice<Board> findByMember_MemberId(String memberId,PageRequest pageRequest);
+
+    @Modifying
+    @Query("update Board b set b.blind = 1 where b.startTime < :dateTime")
+    void updateTimeOverPost(@Param("dateTime") LocalDateTime dateTime);
 }

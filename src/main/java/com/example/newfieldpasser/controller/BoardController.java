@@ -32,12 +32,13 @@ public class BoardController {
     /*
     게시글 상세조회
      */
-    @GetMapping("/board/{boardId}")
-    public ResponseEntity<?> boardInquiryDetail(@PathVariable long boardId) {
+    @GetMapping("/detail/{boardId}")
+    public ResponseEntity<?> boardInquiryDetail(@PathVariable long boardId,
+                                                Authentication authentication) {
         // 상세조회 시 조회 수 카운트
         boardService.updateViewCount(boardId);
 
-        return boardService.boardInquiryDetail(boardId);
+        return boardService.boardInquiryDetail(boardId, authentication);
     }
 
     /*
