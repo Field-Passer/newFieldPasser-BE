@@ -51,6 +51,7 @@ public class BoardDTO {
         private long boardId;
         private String memberId;
         private String memberName;
+        private String memberNickName;
         private String categoryName;
         private String districtName;
         private String title;
@@ -72,6 +73,7 @@ public class BoardDTO {
             this.boardId = board.getBoardId();
             this.memberId = board.getMember().getMemberId();
             this.memberName = board.getMember().getMemberName();
+            this.memberNickName = board.getMember().getMemberNickName();
             this.categoryName = board.getCategory().getCategoryName();
             this.districtName = board.getDistrict().getDistrictName();
             this.title = board.getTitle();
@@ -97,6 +99,7 @@ public class BoardDTO {
         private long boardId;
         private String memberId;
         private String memberName;
+        private String memberNickName;
         private String categoryName;
         private String districtName;
         private String title;
@@ -119,6 +122,7 @@ public class BoardDTO {
             this.boardId = board.getBoardId();
             this.memberId = board.getMember().getMemberId();
             this.memberName = board.getMember().getMemberName();
+            this.memberNickName = board.getMember().getMemberNickName();
             this.categoryName = board.getCategory().getCategoryName();
             this.districtName = board.getDistrict().getDistrictName();
             this.title = board.getTitle();
