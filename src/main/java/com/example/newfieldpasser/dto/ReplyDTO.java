@@ -26,6 +26,7 @@ public class ReplyDTO {
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class replyResDTO{
         private long replyId;
@@ -34,6 +35,7 @@ public class ReplyDTO {
         private String replyContent;
         private LocalDateTime replyRegisterDate;
         private LocalDateTime replyUpdateDate;
+        private boolean myReply;
 
         @Builder
         public replyResDTO(Reply reply){
@@ -43,6 +45,7 @@ public class ReplyDTO {
             this.replyContent = reply.getReplyContent();
             this.replyRegisterDate = reply.getReplyRegisterDate();
             this.replyUpdateDate = reply.getReplyUpdateDate();
+            this.myReply = false;
         }
     }
 

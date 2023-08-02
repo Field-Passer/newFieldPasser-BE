@@ -27,6 +27,7 @@ public class CommentDTO {
     }
 
     @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class commentResDTO{
         private long commentId;
@@ -35,6 +36,7 @@ public class CommentDTO {
         private String commentContent;
         private LocalDateTime commentRegisterDate;
         private LocalDateTime commentUpDate;
+        private boolean myComment;
 
         @Builder
         public commentResDTO(Comment comment){
@@ -44,6 +46,7 @@ public class CommentDTO {
             this.commentContent = comment.getCommentContent();
             this.commentRegisterDate = comment.getCommentRegisterDate();
             this.commentUpDate = comment.getCommentUpdateDate();
+            this.myComment = false;
         }
     }
 

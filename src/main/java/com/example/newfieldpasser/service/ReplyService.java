@@ -88,10 +88,13 @@ public class ReplyService {
      /*
         답글 조회
      */
-    public ResponseEntity<?> replyListInquiryByComment(long commentId, int page){
+    public ResponseEntity<?> replyListInquiryByComment(long commentId, int page, Authentication authentication){
         try{
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "replyRegisterDate"));
             Slice<ReplyDTO.replyResDTO> replyList= replyRepository.findByComment_CommentId(commentId,pageRequest).map(ReplyDTO.replyResDTO :: new);
+
+            String loginMemberId = authentication != null ? authentication.getName() : "";
+            replyList.getContent().forEach(reply -> reply.setMyReply(reply.getMemberId().equals(loginMemberId)));
 
             return response.success(replyList,"Reply Inquiry Success");
         }catch (ReplyException e) {
