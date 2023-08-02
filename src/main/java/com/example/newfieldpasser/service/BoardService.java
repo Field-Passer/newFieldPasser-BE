@@ -111,11 +111,7 @@ public class BoardService {
         try {
             BoardDTO.boardDetailResDTO result = boardRepository.findByBoardId(boardId).map(BoardDTO.boardDetailResDTO::new).get();
 
-            String loginMemberId = "";
-
-            if (authentication != null) {
-                loginMemberId = authentication.getName();
-            }
+            String loginMemberId = authentication != null ? authentication.getName() : "";
 
             if (loginMemberId.equals(result.getMemberId())) {
                 result.setMyBoard(true);
