@@ -40,8 +40,10 @@ public class ReplyController {
      /*
     답글 조회
      */
-    @GetMapping("/reply/{commentId}/{page}")
-    public ResponseEntity<?> replyListInquiryByComment(@PathVariable long commentId, @PathVariable int page){
-        return replyService.replyListInquiryByComment(commentId,page);
+    @GetMapping("/reply-lookup/{commentId}/{page}")
+    public ResponseEntity<?> replyListInquiryByComment(@PathVariable long commentId,
+                                                       @PathVariable int page,
+                                                       Authentication authentication){
+        return replyService.replyListInquiryByComment(commentId,page,authentication);
     }
 }

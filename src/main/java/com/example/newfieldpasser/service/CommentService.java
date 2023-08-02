@@ -94,10 +94,13 @@ public class CommentService {
     /*
       댓글 조회 - 게시글별
      */
-    public ResponseEntity<?> commentListInquiryByBoard(long boardId ,int page ){
+    public ResponseEntity<?> commentListInquiryByBoard(long boardId ,int page, Authentication authentication){
         try{
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "commentRegisterDate"));
             Slice<CommentDTO.commentResDTO> commentList= commentRepository.findByBoard_BoardId(boardId,pageRequest).map(CommentDTO.commentResDTO::new);
+
+            String loginMemberId = authentication != null ? authentication.getName() : "";
+            commentList.getContent().forEach(comment -> comment.setMyComment(comment.getMemberId().equals(loginMemberId)));
 
             return response.success(commentList,"Comment Inquiry Success");
         }catch (CommentException e){
