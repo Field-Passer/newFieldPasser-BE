@@ -56,7 +56,7 @@ public class BoardService {
     @Transactional
     public ResponseEntity<?> registerBoard(MultipartFile file, Authentication authentication, BoardDTO.boardReqDTO boardReqDTO) {
         try {
-            String imageUrl = uploadPic(file);
+            String imageUrl = file.isEmpty() ? null : uploadPic(file);
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
             Category category = categoryRepository.findByCategoryName(boardReqDTO.getCategoryName()).get();
             District district = districtRepository.findByDistrictName(boardReqDTO.getDistrictName()).get();
@@ -79,10 +79,6 @@ public class BoardService {
     파일 업로드 관련 메서드
      */
     public String uploadPic(MultipartFile file) throws IOException {
-
-        if (file.isEmpty()) {
-            return "";
-        }
 
         UUID uuid = UUID.randomUUID(); // 중복 방지를 위한 랜덤 값
         String originalFilename = file.getOriginalFilename();
