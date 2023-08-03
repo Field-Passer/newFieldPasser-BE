@@ -56,7 +56,10 @@ public class BoardService {
     @Transactional
     public ResponseEntity<?> registerBoard(MultipartFile file, Authentication authentication, BoardDTO.boardReqDTO boardReqDTO) {
         try {
-            String imageUrl = file.isEmpty() ? "" : uploadPic(file);
+            String imageUrl = null;
+            if (!file.isEmpty()) {
+                imageUrl = uploadPic(file);
+            }
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
             Category category = categoryRepository.findByCategoryName(boardReqDTO.getCategoryName()).get();
             District district = districtRepository.findByDistrictName(boardReqDTO.getDistrictName()).get();
