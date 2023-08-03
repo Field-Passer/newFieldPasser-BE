@@ -57,7 +57,7 @@ public class BoardService {
     public ResponseEntity<?> registerBoard(MultipartFile file, Authentication authentication, BoardDTO.boardReqDTO boardReqDTO) {
         try {
             String imageUrl = null;
-            if (!file.isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 imageUrl = uploadPic(file);
             }
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
