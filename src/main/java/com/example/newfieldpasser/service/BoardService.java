@@ -69,6 +69,7 @@ public class BoardService {
             log.error("Fail Upload file!");
             return response.fail("Fail Upload file!");
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Fail Register Board");
             return response.fail("Fail Register Board");
         }
