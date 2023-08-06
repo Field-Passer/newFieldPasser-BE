@@ -49,6 +49,8 @@ public class BoardService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${s3-url}")
+    private String s3url;
 
     /*
     게시글 등록
@@ -130,17 +132,29 @@ public class BoardService {
     게시글 수정
      */
     @Transactional
-    public ResponseEntity<?> editBoard(long boardId, MultipartFile file, BoardDTO.boardReqDTO boardReqDTO) {
+    public ResponseEntity<?> editBoard(long boardId, MultipartFile file, BoardDTO.boardEditReqDTO boardEditReqDTO) {
         try {
 
             Board board = boardRepository.findByBoardId(boardId).get();
-            String changedImageUrl = uploadPic(file);
-            Category category = categoryRepository.findByCategoryName(boardReqDTO.getCategoryName()).get();
-            District district = districtRepository.findByDistrictName(boardReqDTO.getDistrictName()).get();
+
+            String changedImageUrl = boardEditReqDTO.getImageUrl(); //기존 이미지 url -> null이거나 이미 파일 존재
+
+            if (changedImageUrl != null) { //null이 아니면 기존 파일 삭제
+                deleteFile(changedImageUrl);
+                changedImageUrl = null;
+            }
+
+            if (file != null && !file.isEmpty()) { //삭제 후 다시 업로드
+                changedImageUrl = uploadPic(file);
+            }
+
+
+            Category category = categoryRepository.findByCategoryName(boardEditReqDTO.getCategoryName()).get();
+            District district = districtRepository.findByDistrictName(boardEditReqDTO.getDistrictName()).get();
 
             board.updatePost(category, district, changedImageUrl,
-                    boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getStartTime(),
-                    boardReqDTO.getEndTime(), boardReqDTO.getTransactionStatus(), boardReqDTO.getPrice());
+                    boardEditReqDTO.getTitle(), boardEditReqDTO.getContent(), boardEditReqDTO.getStartTime(),
+                    boardEditReqDTO.getEndTime(), boardEditReqDTO.getTransactionStatus(), boardEditReqDTO.getPrice());
 
             return response.success("Edit Board Success!");
 
@@ -150,6 +164,22 @@ public class BoardService {
         } catch (BoardException e) {
             log.error("게시글 수정 실패!");
             throw new BoardException(ErrorCode.BOARD_EDIT_FAIL);
+        }
+    }
+
+    /*
+     * S3에 업로드된 파일 삭제
+     */
+    public void deleteFile(String imageUrl) {
+
+        try {
+            String fileName = imageUrl.replace(s3url, "");
+            boolean isObjectExist = amazonS3.doesObjectExist(bucket, fileName);
+            if (isObjectExist) {
+                amazonS3.deleteObject(bucket, fileName);
+            }
+        } catch (Exception e) {
+            log.debug("Delete File failed", e);
         }
     }
 
