@@ -16,6 +16,7 @@ public class CommentDTO {
     public static class commentReqDTO{
         private String commentContent;
         private long boardId;
+        private Long parentId;
 
         public Comment toEntity(Member member, Board board ){
             return Comment.builder()

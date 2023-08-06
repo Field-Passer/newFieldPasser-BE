@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -32,6 +33,14 @@ public class Comment {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private  Comment parent;
+
+
+    @OneToMany(mappedBy = "parent",orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
+
     @Column(name = "comment_content", nullable = false)
     private String commentContent;
 
@@ -43,14 +52,21 @@ public class Comment {
     @Column(name = "comment_update_date")
     private LocalDateTime commentUpdateDate;
 
-    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
-    private int replyCount;
 
-    @OneToMany(mappedBy = "comment")
-    private List<Reply> replyList;
+//    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
+//    private int replyCount;
+//
+//    @OneToMany(mappedBy = "comment")
+//    private List<Reply> replyList;
     public void updateComment(String commentContent){
 
         this.commentContent =commentContent;
 
     }
+
+    public void updateParent(Comment comment){
+        this.parent = comment;
+    }
+
+
 }

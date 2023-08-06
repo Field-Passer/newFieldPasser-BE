@@ -1,5 +1,6 @@
 package com.example.newfieldpasser.service;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.newfieldpasser.dto.CommentDTO;
 import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Board;
@@ -43,7 +44,16 @@ public class CommentService {
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
             Board board = boardRepository.findByBoardId(commentReqDTO.getBoardId()).get();
 
-            commentRepository.save(commentReqDTO.toEntity(member,board));
+            Comment comment = commentReqDTO.toEntity(member,board);
+            Comment parent;
+
+            if(commentReqDTO.getParentId() != null){
+                parent = commentRepository.findByCommentId(commentReqDTO.getParentId())
+                        .orElseThrow(() -> new NotFoundException("Could not found comment id :" + commentReqDTO.getParentId()));
+                comment.updateParent(parent);
+            }
+
+            commentRepository.save(comment);
             return response.success("Comment registration Success!");
 
         }catch (Exception e){
@@ -133,16 +143,16 @@ public class CommentService {
         }
     }
 
-    public ResponseEntity<?> replyCountByComment(long commentId ){
-        try{
-            Comment comment = commentRepository.findByCommentId(commentId).get();
-            return response.success(comment.getReplyCount(),"댓글 개수 조회 성공");
-
-        }catch (CommentException e){
-            e.printStackTrace();
-            return response.fail("댓글 개수 조회 실패");
-        }
-    }
+//    public ResponseEntity<?> replyCountByComment(long commentId ){
+//        try{
+//            Comment comment = commentRepository.findByCommentId(commentId).get();
+//            return response.success(comment.getReplyCount(),"댓글 개수 조회 성공");
+//
+//        }catch (CommentException e){
+//            e.printStackTrace();
+//            return response.fail("댓글 개수 조회 실패");
+//        }
+//    }
 
 
 

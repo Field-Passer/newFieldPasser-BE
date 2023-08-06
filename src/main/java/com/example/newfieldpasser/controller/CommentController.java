@@ -58,8 +58,8 @@ public class CommentController {
         return commentService.commentListMember(authentication,page);
     }
 
-    @GetMapping("/count/{commentId}")
-    public ResponseEntity<?> replyCountByComment(@PathVariable long commentId){
-        return commentService.replyCountByComment(commentId);
-    }
+//    @GetMapping("/count/{commentId}")
+//    public ResponseEntity<?> replyCountByComment(@PathVariable long commentId){
+//        return commentService.replyCountByComment(commentId);
+//    }
 }
