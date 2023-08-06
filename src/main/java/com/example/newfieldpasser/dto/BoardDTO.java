@@ -46,6 +46,39 @@ public class BoardDTO {
     }
 
     @Getter
+    @Setter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class boardEditReqDTO {
+
+        private String categoryName;
+        private String districtName;
+        private String title;
+        private String content;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        private LocalDateTime startTime;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        private LocalDateTime endTime;
+        private TransactionStatus transactionStatus;
+        private int price;
+        private String imageUrl;
+
+        public Board toEntity(Member member, Category category, District district, String imageUrl) {
+            return Board.builder()
+                    .member(member)
+                    .category(category)
+                    .district(district)
+                    .title(title)
+                    .content(content)
+                    .startTime(startTime)
+                    .endTime(endTime)
+                    .imageUrl(imageUrl)
+                    .transactionStatus(transactionStatus)
+                    .price(price)
+                    .build();
+        }
+    }
+
+    @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class boardResDTO {
         private long boardId;
