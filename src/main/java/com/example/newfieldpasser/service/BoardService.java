@@ -49,6 +49,8 @@ public class BoardService {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+    @Value("${s3-url}")
+    private String s3url;
 
     /*
     게시글 등록
@@ -56,7 +58,10 @@ public class BoardService {
     @Transactional
     public ResponseEntity<?> registerBoard(MultipartFile file, Authentication authentication, BoardDTO.boardReqDTO boardReqDTO) {
         try {
-            String imageUrl = uploadPic(file);
+            String imageUrl = null;
+            if (file != null && !file.isEmpty()) {
+                imageUrl = uploadPic(file);
+            }
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
             Category category = categoryRepository.findByCategoryName(boardReqDTO.getCategoryName()).get();
             District district = districtRepository.findByDistrictName(boardReqDTO.getDistrictName()).get();
@@ -69,6 +74,7 @@ public class BoardService {
             log.error("Fail Upload file!");
             return response.fail("Fail Upload file!");
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Fail Register Board");
             return response.fail("Fail Register Board");
         }
@@ -78,10 +84,6 @@ public class BoardService {
     파일 업로드 관련 메서드
      */
     public String uploadPic(MultipartFile file) throws IOException {
-
-        if (file.isEmpty()) {
-            return null;
-        }
 
         UUID uuid = UUID.randomUUID(); // 중복 방지를 위한 랜덤 값
         String originalFilename = file.getOriginalFilename();
@@ -130,17 +132,31 @@ public class BoardService {
     게시글 수정
      */
     @Transactional
-    public ResponseEntity<?> editBoard(long boardId, MultipartFile file, BoardDTO.boardReqDTO boardReqDTO) {
+    public ResponseEntity<?> editBoard(long boardId, MultipartFile file, BoardDTO.boardEditReqDTO boardEditReqDTO) {
         try {
 
             Board board = boardRepository.findByBoardId(boardId).get();
-            String changedImageUrl = uploadPic(file);
-            Category category = categoryRepository.findByCategoryName(boardReqDTO.getCategoryName()).get();
-            District district = districtRepository.findByDistrictName(boardReqDTO.getDistrictName()).get();
 
-            board.updatePost(category, district, changedImageUrl,
-                    boardReqDTO.getTitle(), boardReqDTO.getContent(), boardReqDTO.getStartTime(),
-                    boardReqDTO.getEndTime(), boardReqDTO.getTransactionStatus(), boardReqDTO.getPrice());
+            String imageUrl = board.getImageUrl() != null ? board.getImageUrl() : null;
+            if (file != null && !file.isEmpty()) { //파일이 있으면 재업로드 -> 기존 파일이 있을 경우 삭제 후 업로드
+                if (imageUrl != null) {
+                    deleteFile(imageUrl);
+                }
+                imageUrl = uploadPic(file);
+            } else {
+                if (boardEditReqDTO.isImageUrlDel()) { //기존 이미지를 삭제하는지 여부 -> 삭제한다면 DB에 저장된 url 삭제
+                    deleteFile(imageUrl);
+                    imageUrl = null;
+                }
+            }
+
+
+            Category category = categoryRepository.findByCategoryName(boardEditReqDTO.getCategoryName()).get();
+            District district = districtRepository.findByDistrictName(boardEditReqDTO.getDistrictName()).get();
+
+            board.updatePost(category, district, imageUrl,
+                    boardEditReqDTO.getTitle(), boardEditReqDTO.getContent(), boardEditReqDTO.getStartTime(),
+                    boardEditReqDTO.getEndTime(), boardEditReqDTO.getTransactionStatus(), boardEditReqDTO.getPrice());
 
             return response.success("Edit Board Success!");
 
@@ -150,6 +166,22 @@ public class BoardService {
         } catch (BoardException e) {
             log.error("게시글 수정 실패!");
             throw new BoardException(ErrorCode.BOARD_EDIT_FAIL);
+        }
+    }
+
+    /*
+     * S3에 업로드된 파일 삭제
+     */
+    public void deleteFile(String imageUrl) {
+
+        try {
+            String fileName = imageUrl.replace(s3url, "");
+            boolean isObjectExist = amazonS3.doesObjectExist(bucket, fileName);
+            if (isObjectExist) {
+                amazonS3.deleteObject(bucket, fileName);
+            }
+        } catch (Exception e) {
+            log.debug("Delete File failed", e);
         }
     }
 

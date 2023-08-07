@@ -46,10 +46,10 @@ public class BoardController {
      */
     @PutMapping("/board/edit/{boardId}")
     public ResponseEntity<?> editBoard(@PathVariable long boardId,
-                                       @RequestParam("file") MultipartFile file,
-                                       BoardDTO.boardReqDTO boardReqDTO) {
+                                       @RequestParam(value = "file", required = false) MultipartFile file,
+                                       BoardDTO.boardEditReqDTO boardEditReqDTO) {
 
-        return boardService.editBoard(boardId,file,boardReqDTO);
+        return boardService.editBoard(boardId,file,boardEditReqDTO);
     }
 
     /*
