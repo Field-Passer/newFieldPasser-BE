@@ -137,13 +137,12 @@ public class BoardService {
 
             Board board = boardRepository.findByBoardId(boardId).get();
 
-            if (boardEditReqDTO.getImageUrl() != null) { //null이 아니면 기존 파일 삭제
+            String changedImageUrl = boardEditReqDTO.getImageUrl() != null ? boardEditReqDTO.getImageUrl() : null;
+            if (boardEditReqDTO.getImageUrl() != null) {
                 deleteFile(boardEditReqDTO.getImageUrl());
             }
 
-            String changedImageUrl = null;
-
-            if (file != null && !file.isEmpty()) { //삭제 후 다시 업로드
+            if (file != null && !file.isEmpty()) {
                 changedImageUrl = uploadPic(file);
             }
 
