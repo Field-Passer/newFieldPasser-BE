@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "comment")
+//@SQLDelete(sql = "UPDATE comment SET comment_delete = true WHERE comment_id =?")
+//@Where(clause = "comment_delete = false")
 public class Comment {
     @Id
     @Column(name = "comment_id")
@@ -41,6 +43,10 @@ public class Comment {
     @OneToMany(mappedBy = "parent",orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
+//
+//    @Column(name="comment_delete")
+//    private Boolean deleteCheck;
+
     @Column(name = "comment_content", nullable = false)
     private String commentContent;
 
@@ -53,7 +59,7 @@ public class Comment {
     private LocalDateTime commentUpdateDate;
 
 
-//    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
+    //    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
 //    private int replyCount;
 //
 //    @OneToMany(mappedBy = "comment")
@@ -70,3 +76,5 @@ public class Comment {
 
 
 }
+
+

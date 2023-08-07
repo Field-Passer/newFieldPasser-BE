@@ -7,6 +7,8 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentDTO {
 
@@ -15,6 +17,7 @@ public class CommentDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class commentReqDTO{
         private String commentContent;
+        private long commentId;
         private long boardId;
         private Long parentId;
 
@@ -38,6 +41,7 @@ public class CommentDTO {
         private LocalDateTime commentRegisterDate;
         private LocalDateTime commentUpDate;
         private boolean myComment;
+        private List<commentResDTO> children = new ArrayList<>();
 
         @Builder
         public commentResDTO(Comment comment){
@@ -49,6 +53,7 @@ public class CommentDTO {
             this.commentUpDate = comment.getCommentUpdateDate();
             this.myComment = false;
         }
+
     }
 
 
