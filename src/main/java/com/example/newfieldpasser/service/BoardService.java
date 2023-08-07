@@ -137,20 +137,24 @@ public class BoardService {
 
             Board board = boardRepository.findByBoardId(boardId).get();
 
-            String changedImageUrl = boardEditReqDTO.getImageUrl() != null ? boardEditReqDTO.getImageUrl() : null;
-            if (boardEditReqDTO.getImageUrl() != null) {
-                deleteFile(boardEditReqDTO.getImageUrl());
-            }
-
-            if (file != null && !file.isEmpty()) {
-                changedImageUrl = uploadPic(file);
+            String imageUrl = board.getImageUrl() != null ? board.getImageUrl() : null;
+            if (file != null && !file.isEmpty()) { //파일이 있으면 재업로드 -> 기존 파일이 있을 경우 삭제 후 업로드
+                if (imageUrl != null) {
+                    deleteFile(imageUrl);
+                }
+                imageUrl = uploadPic(file);
+            } else {
+                if (boardEditReqDTO.isImageUrlDel()) { //기존 이미지를 삭제하는지 여부 -> 삭제한다면 DB에 저장된 url 삭제
+                    deleteFile(imageUrl);
+                    imageUrl = null;
+                }
             }
 
 
             Category category = categoryRepository.findByCategoryName(boardEditReqDTO.getCategoryName()).get();
             District district = districtRepository.findByDistrictName(boardEditReqDTO.getDistrictName()).get();
 
-            board.updatePost(category, district, changedImageUrl,
+            board.updatePost(category, district, imageUrl,
                     boardEditReqDTO.getTitle(), boardEditReqDTO.getContent(), boardEditReqDTO.getStartTime(),
                     boardEditReqDTO.getEndTime(), boardEditReqDTO.getTransactionStatus(), boardEditReqDTO.getPrice());
 
