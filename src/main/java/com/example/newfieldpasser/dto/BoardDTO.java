@@ -60,7 +60,7 @@ public class BoardDTO {
         private LocalDateTime endTime;
         private TransactionStatus transactionStatus;
         private int price;
-        private String imageUrl;
+        private boolean imageUrlDel;
 
         public Board toEntity(Member member, Category category, District district, String imageUrl) {
             return Board.builder()
