@@ -9,10 +9,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import static com.example.newfieldpasser.entity.QComment.comment;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CommentRepositoryImpl extends QuerydslRepositorySupport implements CommentRepositoryCustom {
 
@@ -51,5 +48,15 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
         }
         });
         return new SliceImpl<>(commentList,pageable,hasNext);
+    }
+
+    @Override
+    public Optional<Comment> findCommentByIdWithParent(long commentId) {
+        Comment selectedComment = queryFactory.select(comment)
+                .from(comment)
+                .leftJoin(comment.parent).fetchJoin()
+                .where(comment.commentId.eq(commentId))
+                .fetchOne();
+        return Optional.ofNullable(selectedComment);
     }
 }

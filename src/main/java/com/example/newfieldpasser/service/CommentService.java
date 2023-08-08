@@ -91,14 +91,29 @@ public class CommentService {
     @Transactional
     public ResponseEntity<?> deleteComment(long commentId ){
         try{
+            Comment comment = commentRepository.findCommentByIdWithParent(commentId)
+                            .orElseThrow(() -> new NotFoundException("Coule not found comment id :" + commentId));
 
-            commentRepository.deleteByCommentId(commentId);
+            if(comment.getChildren().size() != 0){
+                comment.delete(true);
+            }else{
+                commentRepository.delete(getDeleteTableAncestorComment(comment));
+            }
+//            commentRepository.deleteByCommentId(commentId);
             return response.success("Comment Delete Success");
         }catch (CommentException e){
             e.printStackTrace();
             throw new CommentException(ErrorCode.COMMENT_DELETE_FAIL);
         }
 
+    }
+
+    private Comment getDeleteTableAncestorComment(Comment comment){
+        Comment parent = comment.getParent();
+        if(parent != null && parent.getChildren().size() == 1 && parent.getDeleteCheck()){
+            return getDeleteTableAncestorComment(parent);
+        }
+        return comment;
     }
 
     /*
