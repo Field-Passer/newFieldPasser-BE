@@ -11,10 +11,7 @@ import com.example.newfieldpasser.entity.District;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.board.BoardException;
 import com.example.newfieldpasser.exception.board.ErrorCode;
-import com.example.newfieldpasser.repository.BoardRepository;
-import com.example.newfieldpasser.repository.CategoryRepository;
-import com.example.newfieldpasser.repository.DistrictRepository;
-import com.example.newfieldpasser.repository.MemberRepository;
+import com.example.newfieldpasser.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +41,7 @@ public class BoardService {
     private final CategoryRepository categoryRepository;
     private final DistrictRepository districtRepository;
     private final MemberRepository memberRepository;
+    private final WishBoardRepository wishBoardRepository;
     private final AmazonS3 amazonS3;
     private final Response response;
 
@@ -115,8 +113,12 @@ public class BoardService {
 
             String loginMemberId = authentication != null ? authentication.getName() : "";
 
-            if (loginMemberId.equals(result.getMemberId())) {
+            if (loginMemberId.equals(result.getMemberId())) { //본인 작성 게시글 여부 반환
                 result.setMyBoard(true);
+            }
+
+            if (wishBoardRepository.existsByMember_MemberIdAndBoard_BoardId(loginMemberId, boardId)) { // 관심 게시글 여부 반환
+                result.setLikeBoard(true);
             }
 
             return response.success(result, "Board Inquiry Success!");

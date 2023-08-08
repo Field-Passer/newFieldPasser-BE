@@ -149,6 +149,7 @@ public class BoardDTO {
         private boolean blind;
         private boolean deleteCheck;
         private boolean myBoard;
+        private boolean likeBoard;
 
         @Builder
         public boardDetailResDTO(Board board) {
@@ -172,6 +173,7 @@ public class BoardDTO {
             this.blind = board.isBlind();
             this.deleteCheck = board.isDeleteCheck();
             this.myBoard = false;
+            this.likeBoard = false;
         }
     }
 

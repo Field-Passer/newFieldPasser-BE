@@ -17,6 +17,7 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom {
 
+    @EntityGraph(attributePaths = {"member","category","district"})
     Optional<Board> findByBoardId(long boardId);
     @Modifying
     @Query("update Board b set b.viewCount = b.viewCount + 1 where b.boardId = :boardId")
