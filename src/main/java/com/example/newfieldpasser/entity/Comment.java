@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,6 +19,8 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "comment")
+//@SQLDelete(sql = "UPDATE comment SET comment_delete = true WHERE comment_id =?")
+//@Where(clause = "comment_delete = false")
 public class Comment {
     @Id
     @Column(name = "comment_id")
@@ -32,6 +35,18 @@ public class Comment {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private  Comment parent;
+
+
+    @OneToMany(mappedBy = "parent",orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
+
+//
+//    @Column(name="comment_delete")
+//    private Boolean deleteCheck;
+
     @Column(name = "comment_content", nullable = false)
     private String commentContent;
 
@@ -43,14 +58,23 @@ public class Comment {
     @Column(name = "comment_update_date")
     private LocalDateTime commentUpdateDate;
 
-    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
-    private int replyCount;
 
-    @OneToMany(mappedBy = "comment")
-    private List<Reply> replyList;
+    //    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
+//    private int replyCount;
+//
+//    @OneToMany(mappedBy = "comment")
+//    private List<Reply> replyList;
     public void updateComment(String commentContent){
 
         this.commentContent =commentContent;
 
     }
+
+    public void updateParent(Comment comment){
+        this.parent = comment;
+    }
+
+
 }
+
+
