@@ -59,11 +59,7 @@ public class Comment {
     private LocalDateTime commentUpdateDate;
 
 
-    //    @Formula("(SELECT count(1) FROM reply r WHERE r.comment_Id = comment_Id)")
-//    private int replyCount;
-//
-//    @OneToMany(mappedBy = "comment")
-//    private List<Reply> replyList;
+
     public void updateComment(String commentContent){
 
         this.commentContent =commentContent;
@@ -73,6 +69,8 @@ public class Comment {
     public void updateParent(Comment comment){
         this.parent = comment;
     }
+
+
 
 
 }
