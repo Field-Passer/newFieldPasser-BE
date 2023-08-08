@@ -46,7 +46,7 @@ public class CommentService {
 
             Comment comment = commentReqDTO.toEntity(member,board);
             Comment parent;
-            System.out.println("commentId"+commentReqDTO.getParentId());
+
             if(commentReqDTO.getParentId() != null){
                 parent = commentRepository.findByCommentId(commentReqDTO.getParentId())
                         .orElseThrow(() -> new NotFoundException("Could not found comment id :" + commentReqDTO.getParentId()));
@@ -111,7 +111,10 @@ public class CommentService {
                     .findByBoardId(pageRequest,boardId);
 
             String loginMemberId = authentication != null ? authentication.getName() : "";
-            commentList.getContent().forEach(comment -> comment.setMyComment(comment.getMemberId().equals(loginMemberId)));
+            commentList.getContent().forEach(p -> {
+                p.getChildren().forEach(c -> c.setMyComment(c.getMemberId().equals(loginMemberId)));
+                p.setMyComment(p.getMemberId().equals(loginMemberId));
+            });
 
             return response.success(commentList,"Comment Inquiry Success");
         }catch (CommentException e){
