@@ -25,6 +25,7 @@ public class CommentDTO {
                     .member(member)
                     .board(board)
                     .commentContent(commentContent)
+                    .deleteCheck(false)
                     .build();
         }
     }
