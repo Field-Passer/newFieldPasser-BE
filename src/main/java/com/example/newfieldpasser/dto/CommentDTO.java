@@ -36,6 +36,7 @@ public class CommentDTO {
         private long commentId;
         private String memberId;
 
+        private boolean deleteCheck;
         private String title;
         private String commentContent;
         private LocalDateTime commentRegisterDate;
@@ -48,6 +49,7 @@ public class CommentDTO {
             this.commentId = comment.getCommentId();
             this.memberId = comment.getMember().getMemberId();
             this.title = comment.getBoard().getTitle();
+            this.deleteCheck = comment.getDeleteCheck();
             this.commentContent = comment.getCommentContent();
             this.commentRegisterDate = comment.getCommentRegisterDate();
             this.commentUpDate = comment.getCommentUpdateDate();
