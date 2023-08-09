@@ -67,8 +67,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<WishBoard> wishBoardList;
 
-    @OneToMany(mappedBy = "member")
-    private List<Reply> replyList;
+ 
 
     // == 생성 메서드 == //
     public static Member registerUser(AuthDTO.SignupDto signupDto) {
