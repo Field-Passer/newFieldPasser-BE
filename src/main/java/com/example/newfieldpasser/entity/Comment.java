@@ -18,6 +18,7 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
+@DynamicUpdate
 @Table(name = "comment")
 //@SQLDelete(sql = "UPDATE comment SET comment_delete = true WHERE comment_id =?")
 //@Where(clause = "comment_delete = false")
@@ -43,9 +44,9 @@ public class Comment {
     @OneToMany(mappedBy = "parent",orphanRemoval = true)
     private List<Comment> children = new ArrayList<>();
 
-//
-//    @Column(name="comment_delete")
-//    private Boolean deleteCheck;
+
+    @ColumnDefault("FALSE")
+    private Boolean deleteCheck;
 
     @Column(name = "comment_content", nullable = false)
     private String commentContent;
@@ -71,7 +72,9 @@ public class Comment {
     }
 
 
-
+    public void delete(Boolean deleteCheck){
+        this.deleteCheck = deleteCheck;
+    }
 
 }
 
