@@ -1,6 +1,7 @@
 package com.example.newfieldpasser.repository;
 
 import com.example.newfieldpasser.dto.CommentDTO;
+import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.entity.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,7 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
 
 
     @Override
-    public Slice<CommentDTO.commentResDTO> findByBoardId(Pageable pageable,long boardId) {
+    public Slice<CommentDTO.commentResDTO> findByBoardId(Pageable pageable,long boardId ) {
         List<Comment> comments = queryFactory.selectFrom(comment)
                 .leftJoin(comment.parent).fetchJoin()
                 .where(comment.board.boardId.eq(boardId))

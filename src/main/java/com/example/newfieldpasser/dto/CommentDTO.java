@@ -17,7 +17,6 @@ public class CommentDTO {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class commentReqDTO{
         private String commentContent;
-        private long commentId;
         private long boardId;
         private Long parentId;
 
@@ -36,6 +35,7 @@ public class CommentDTO {
     public static class commentResDTO{
         private long commentId;
         private String memberId;
+
         private String title;
         private String commentContent;
         private LocalDateTime commentRegisterDate;
@@ -55,6 +55,7 @@ public class CommentDTO {
         }
 
     }
+
 
 
     
