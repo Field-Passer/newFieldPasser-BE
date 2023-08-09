@@ -18,10 +18,8 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
-@DynamicUpdate
+@DynamicInsert
 @Table(name = "comment")
-//@SQLDelete(sql = "UPDATE comment SET comment_delete = true WHERE comment_id =?")
-//@Where(clause = "comment_delete = false")
 public class Comment {
     @Id
     @Column(name = "comment_id")

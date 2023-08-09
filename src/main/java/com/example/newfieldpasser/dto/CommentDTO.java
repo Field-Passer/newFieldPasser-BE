@@ -25,7 +25,6 @@ public class CommentDTO {
                     .member(member)
                     .board(board)
                     .commentContent(commentContent)
-                    .deleteCheck(false)
                     .build();
         }
     }
@@ -36,6 +35,8 @@ public class CommentDTO {
     public static class commentResDTO{
         private long commentId;
         private String memberId;
+
+        private String memberNickname;
 
         private boolean deleteCheck;
         private String title;
@@ -49,6 +50,7 @@ public class CommentDTO {
         public commentResDTO(Comment comment){
             this.commentId = comment.getCommentId();
             this.memberId = comment.getMember().getMemberId();
+            this.memberNickname = comment.getMember().getMemberNickName();
             this.title = comment.getBoard().getTitle();
             this.deleteCheck = comment.getDeleteCheck();
             this.commentContent = comment.getCommentContent();
