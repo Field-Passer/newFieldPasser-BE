@@ -16,7 +16,6 @@ public class WishBoardDTO {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class WishBoardReqDTO {
-        private String memberId;
         private long boardId;
 
         public WishBoard toEntity(Member member, Board board) {

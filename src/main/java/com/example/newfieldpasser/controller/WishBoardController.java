@@ -19,9 +19,9 @@ public class WishBoardController {
     관심 글 등록
      */
     @PostMapping("/board/register/wish-list")
-    public ResponseEntity<?> likeBoard(@RequestBody WishBoardDTO.WishBoardReqDTO wishBoardReqDTO) {
+    public ResponseEntity<?> likeBoard(Authentication authentication, @RequestBody WishBoardDTO.WishBoardReqDTO wishBoardReqDTO) {
 
-        return wishBoardService.likeBoard(wishBoardReqDTO);
+        return wishBoardService.likeBoard(authentication, wishBoardReqDTO);
     }
 
     /*
@@ -38,9 +38,9 @@ public class WishBoardController {
     관심 글 삭제
      */
     @DeleteMapping("/board/delete/wish-list")
-    public ResponseEntity<?> deleteWishBoard(@RequestBody WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
+    public ResponseEntity<?> deleteWishBoard(Authentication authentication, @RequestBody WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
 
-        return wishBoardService.deleteWishBoard(wishPostReqDTO);
+        return wishBoardService.deleteWishBoard(authentication, wishPostReqDTO);
     }
 
 }

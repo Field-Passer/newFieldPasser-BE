@@ -34,11 +34,11 @@ public class WishBoardService {
     관심 글 등록
      */
     @Transactional
-    public ResponseEntity<?> likeBoard(WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
+    public ResponseEntity<?> likeBoard(Authentication authentication, WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
 
         try {
             // 관심 글 등록 갯수 카운트
-            String memberId  = wishPostReqDTO.getMemberId();
+            String memberId  = authentication.getName();
             long boardId = wishPostReqDTO.getBoardId();
             if (!wishBoardRepository.existsByMember_MemberIdAndBoard_BoardId(memberId, boardId)) { // 이미 좋아요 했을 시에 개수 카운트 하지 않음
                 boardRepository.updateWishCount(boardId);
@@ -77,9 +77,9 @@ public class WishBoardService {
     관심 글 삭제
      */
     @Transactional
-    public ResponseEntity<?> deleteWishBoard(WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
+    public ResponseEntity<?> deleteWishBoard(Authentication authentication, WishBoardDTO.WishBoardReqDTO wishPostReqDTO) {
         try {
-            String memberId = wishPostReqDTO.getMemberId();
+            String memberId = authentication.getName();
             long boardId = wishPostReqDTO.getBoardId();
 
             if (wishBoardRepository.existsByMember_MemberIdAndBoard_BoardId(memberId, boardId)) {
