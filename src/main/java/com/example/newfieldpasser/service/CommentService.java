@@ -99,7 +99,7 @@ public class CommentService {
             }else{
                 commentRepository.delete(getDeleteTableAncestorComment(comment));
             }
-//            commentRepository.deleteByCommentId(commentId);
+
             return response.success("Comment Delete Success");
         }catch (CommentException e){
             e.printStackTrace();
