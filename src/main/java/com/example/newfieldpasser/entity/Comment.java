@@ -45,7 +45,7 @@ public class Comment {
     private List<Comment> children = new ArrayList<>();
 
 
-    @ColumnDefault("FALSE")
+    @Column(name = "delete_check")
     private Boolean deleteCheck;
 
     @Column(name = "comment_content", nullable = false)
