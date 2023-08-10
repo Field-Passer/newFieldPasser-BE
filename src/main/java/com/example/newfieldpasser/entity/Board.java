@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +21,7 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
+@DynamicUpdate
 @Table(name = "board")
 @SQLDelete(sql = "UPDATE board SET delete_check = true, delete_date = now() WHERE board_id = ?")
 @Where(clause = "delete_check = false AND blind = false")
@@ -113,5 +113,9 @@ public class Board {
         this.endTime = endTime;
         this.transactionStatus = transactionStatus;
         this.price = price;
+    }
+
+    public void blindBoard() {
+        this.blind = !this.blind;
     }
 }

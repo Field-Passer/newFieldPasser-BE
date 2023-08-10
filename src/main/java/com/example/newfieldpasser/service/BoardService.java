@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -568,6 +569,42 @@ public class BoardService {
             throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
         }
 
+    }
+
+    /*
+    게시글 블라인드 또는 블라인드 해제 처리 (관리자용)
+     */
+    @Transactional
+    public ResponseEntity<?> blindBoard(long boardId) {
+        try {
+            Board findBoard = boardRepository.findByBoardIdNative(boardId).get();
+            findBoard.blindBoard();
+
+            return response.success("Blind Success!");
+
+        } catch (BoardException e) {
+            e.printStackTrace();
+            log.error("게시글 블라인드 처리 실패");
+            throw new BoardException(ErrorCode.BOARD_BLIND_FAIL);
+        }
+
+
+    }
+
+    /*
+    블라인드 된 게시글만 조회 (관리자용)
+     */
+    public ResponseEntity<?> blindBoardLookup(int page) {
+        try {
+            PageRequest pageRequest = PageRequest.of(page - 1, 10);
+            Slice<BoardDTO.boardResDTO> boardList = boardRepository.findBlindBoardNative(pageRequest).map(BoardDTO.boardResDTO::new);
+
+            return response.success(boardList, "Blind Board Lookup Success!");
+
+        } catch (BoardException e) {
+            log.error("게시글 리스트 조회 실패!");
+            throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
+        }
     }
 
     /*

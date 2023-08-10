@@ -2,6 +2,7 @@ package com.example.newfieldpasser.controller;
 
 import com.example.newfieldpasser.dto.AnswerDTO;
 import com.example.newfieldpasser.service.AnswerService;
+import com.example.newfieldpasser.service.BoardService;
 import com.example.newfieldpasser.service.MemberService;
 import com.example.newfieldpasser.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class AdminController { //관리자 승격, 답변 등록 등 관리자 �
     private final MemberService memberService;
     private final AnswerService answerService;
     private final QuestionService questionService;
+    private final BoardService boardService;
 
     /*
     관리자 승격
@@ -53,5 +55,23 @@ public class AdminController { //관리자 승격, 답변 등록 등 관리자 �
     public ResponseEntity<?> inquiryAllQuestion(@PathVariable int page) {
 
         return questionService.inquiryAllQuestion(page);
+    }
+
+    /*
+    게시글 블라인드 처리(관리자용)
+     */
+    @PutMapping("/admin/board/blind/{boardId}")
+    public ResponseEntity<?> blindBoard(@PathVariable long boardId) {
+
+        return boardService.blindBoard(boardId);
+    }
+
+    /*
+    블라인드 게시글 조회 (관리자용)
+     */
+    @GetMapping("/admin/board/blind/lookup/{page}")
+    public ResponseEntity<?> blindBoardLookup(@PathVariable int page) {
+
+        return boardService.blindBoardLookup(page);
     }
 }

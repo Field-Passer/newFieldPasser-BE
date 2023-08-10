@@ -21,7 +21,6 @@ import java.util.List;
 @Entity
 @Table(name = "member")
 @SQLDelete(sql = "UPDATE member SET member_delete = true WHERE member_id =?")
-@Where(clause = "member_delete = false")
 public class Member {
     @Id
     @Column(name = "member_id")
