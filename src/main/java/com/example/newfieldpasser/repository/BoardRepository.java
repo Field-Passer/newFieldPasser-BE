@@ -19,6 +19,13 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
 
     @EntityGraph(attributePaths = {"member","category","district"})
     Optional<Board> findByBoardId(long boardId);
+
+    @Query(value = "select * from board where board_id = :boardId", nativeQuery = true)
+    Optional<Board> findByBoardIdNative(long boardId);
+
+    @Query(value = "select * from board where blind = true order by register_date DESC", nativeQuery = true)
+    Slice<Board> findBlindBoardNative(PageRequest pageRequest);
+
     @Modifying
     @Query("update Board b set b.viewCount = b.viewCount + 1 where b.boardId = :boardId")
     void updateViewCount(@Param("boardId") long boardId);

@@ -20,7 +20,8 @@ public enum ErrorCode {
     QUESTION_DELETE_FAIL(HttpStatus.BAD_REQUEST, "Board Delete Failed!"),
     REGISTER_ANSWER_FAIL(HttpStatus.BAD_REQUEST, "Register Answer Failed!"),
     ALREADY_EXIST_ANSWER(HttpStatus.CONFLICT, "Already Exist Answer!"),
-    ANSWER_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "Answer Inquiry Failed!");
+    ANSWER_INQUIRY_FAIL(HttpStatus.BAD_REQUEST, "Answer Inquiry Failed!"),
+    BOARD_BLIND_FAIL(HttpStatus.BAD_REQUEST, "Board Blind Failed!");
 
     private final HttpStatus status;
     private final String message;
