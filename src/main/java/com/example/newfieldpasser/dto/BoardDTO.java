@@ -5,7 +5,6 @@ import com.example.newfieldpasser.entity.Category;
 import com.example.newfieldpasser.entity.District;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.parameter.TransactionStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -16,7 +15,7 @@ public class BoardDTO {
     @Getter
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class boardReqDTO {
+    public static class BoardReqDTO {
 
         private String categoryName;
         private String districtName;
@@ -48,7 +47,7 @@ public class BoardDTO {
     @Getter
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class boardEditReqDTO {
+    public static class BoardEditReqDTO {
 
         private String categoryName;
         private String districtName;
@@ -80,7 +79,7 @@ public class BoardDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class boardResDTO {
+    public static class BoardResDTO {
         private long boardId;
         private String memberId;
         private String memberName;
@@ -102,7 +101,7 @@ public class BoardDTO {
         private boolean deleteCheck;
 
         @Builder
-        public boardResDTO(Board board) {
+        public BoardResDTO(Board board) {
             this.boardId = board.getBoardId();
             this.memberId = board.getMember().getMemberId();
             this.memberName = board.getMember().getMemberName();
@@ -128,7 +127,7 @@ public class BoardDTO {
     @Getter
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class boardDetailResDTO {
+    public static class BoardDetailResDTO {
         private long boardId;
         private String memberId;
         private String memberName;
@@ -152,7 +151,7 @@ public class BoardDTO {
         private boolean likeBoard;
 
         @Builder
-        public boardDetailResDTO(Board board) {
+        public BoardDetailResDTO(Board board) {
             this.boardId = board.getBoardId();
             this.memberId = board.getMember().getMemberId();
             this.memberName = board.getMember().getMemberName();

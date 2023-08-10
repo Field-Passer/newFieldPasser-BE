@@ -1,7 +1,6 @@
 package com.example.newfieldpasser.repository;
 
 import com.example.newfieldpasser.dto.CommentDTO;
-import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.entity.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -22,32 +21,41 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
 
 
     @Override
-    public Slice<CommentDTO.commentResDTO> findByBoardId(Pageable pageable,long boardId ) {
-        List<Comment> comments = queryFactory.selectFrom(comment)
-                .leftJoin(comment.parent).fetchJoin()
-                .where(comment.board.boardId.eq(boardId))
-                .orderBy(comment.parent.commentId.asc().nullsFirst())
+    public Slice<CommentDTO.CommentResDTO> findByBoardId(Pageable pageable, long boardId ) {
+        List<Comment> parentComments =
+                queryFactory.selectFrom(comment)
+                .where(comment.board.boardId.eq(boardId), comment.parent.isNull())
+                .orderBy(comment.parent.commentId.asc().nullsFirst(), comment.commentRegisterDate.asc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        List<Comment> childrenComments =
+                queryFactory.selectFrom(comment)
+                .where(comment.board.boardId.eq(boardId), comment.parent.isNotNull())
+                .orderBy(comment.parent.commentId.asc().nullsFirst(), comment.commentRegisterDate.asc())
                 .fetch();
 
         boolean hasNext = false;
-        if(comments.size() > pageable.getPageSize()){
-            comments.remove(pageable.getPageSize());
-
+        if(parentComments.size() > pageable.getPageSize()){
+            parentComments.remove(pageable.getPageSize());
             hasNext = true;
         }
 
-        List<CommentDTO.commentResDTO> commentList = new ArrayList<>();
-        Map<Long,CommentDTO.commentResDTO> commentHashMap = new HashMap<>();
+        List<CommentDTO.CommentResDTO> commentList = new ArrayList<>();
 
-        comments.forEach(c -> {
-        CommentDTO.commentResDTO commentResDTO = new CommentDTO.commentResDTO(c);
-        commentHashMap.put(commentResDTO.getCommentId(),commentResDTO);
-        if(c.getParent() != null) {
-            commentHashMap.get(c.getParent().getCommentId()).getChildren().add(commentResDTO);
-        }else{
-            commentList.add(commentResDTO);
-        }
+        parentComments.forEach(p -> {
+            CommentDTO.CommentResDTO parentResDTO = new CommentDTO.CommentResDTO(p);
+            childrenComments.forEach(c -> {
+                CommentDTO.CommentResDTO childrenResDTO = new CommentDTO.CommentResDTO(c);
+                if (c.getParent().getCommentId() == p.getCommentId()) {
+                    parentResDTO.getChildren().add(childrenResDTO);
+                }
+            });
+
+            commentList.add(parentResDTO);
         });
+
         return new SliceImpl<>(commentList,pageable,hasNext);
     }
 

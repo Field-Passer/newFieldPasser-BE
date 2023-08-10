@@ -19,7 +19,7 @@ public class CommentController {
      */
 
     @PostMapping("/comment/write")
-    public ResponseEntity<?> registerComment(Authentication authentication, @RequestBody CommentDTO.commentReqDTO commentReqDTO){
+    public ResponseEntity<?> registerComment(Authentication authentication, @RequestBody CommentDTO.CommentReqDTO commentReqDTO){
         return commentService.registerComment(authentication,commentReqDTO);
     }
 
@@ -27,7 +27,7 @@ public class CommentController {
     댓글 수정
      */
     @PutMapping("/comment/edit/{commentId}")
-    public ResponseEntity<?> updateComment(@PathVariable long commentId, @RequestBody CommentDTO.commentUpdateDTO commentUpdateDTO){
+    public ResponseEntity<?> updateComment(@PathVariable long commentId, @RequestBody CommentDTO.CommentUpdateDTO commentUpdateDTO){
         return commentService.updateComment(commentId,commentUpdateDTO);
     }
 
