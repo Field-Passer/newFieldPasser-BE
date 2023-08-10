@@ -121,7 +121,7 @@ public class CommentService {
      */
     public ResponseEntity<?> commentListInquiryByBoard(long boardId ,int page, Authentication authentication){
         try{
-            Pageable pageable = PageRequest.of(page - 1, 10);
+            Pageable pageable = PageRequest.of(page - 1, 100);
             Slice<CommentDTO.CommentResDTO> commentList= commentRepository.findByBoardId(pageable,boardId);
 
             String loginMemberId = authentication != null ? authentication.getName() : "";
