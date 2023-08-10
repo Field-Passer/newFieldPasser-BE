@@ -8,7 +8,6 @@ import com.example.newfieldpasser.entity.Comment;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.comment.CommentException;
 import com.example.newfieldpasser.exception.comment.ErrorCode;
-import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.repository.BoardRepository;
 import com.example.newfieldpasser.repository.CommentRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
@@ -40,7 +39,7 @@ public class CommentService {
         댓글 생성
      */
     @Transactional
-    public ResponseEntity<?> registerComment (Authentication authentication, CommentDTO.commentReqDTO commentReqDTO){
+    public ResponseEntity<?> registerComment (Authentication authentication, CommentDTO.CommentReqDTO commentReqDTO){
         try{
             Member member = memberRepository.findByMemberId(authentication.getName()).get();
             Board board = boardRepository.findByBoardId(commentReqDTO.getBoardId()).get();
@@ -69,7 +68,7 @@ public class CommentService {
        댓글 수정
     */
     @Transactional
-    public ResponseEntity<?> updateComment(long commentId, CommentDTO.commentUpdateDTO commentUpdateDTO){
+    public ResponseEntity<?> updateComment(long commentId, CommentDTO.CommentUpdateDTO commentUpdateDTO){
         try{
 
             Comment comment = commentRepository.findByCommentId(commentId).get();
@@ -123,7 +122,7 @@ public class CommentService {
     public ResponseEntity<?> commentListInquiryByBoard(long boardId ,int page, Authentication authentication){
         try{
             Pageable pageable = PageRequest.of(page - 1, 10);
-            Slice<CommentDTO.commentResDTO> commentList= commentRepository.findByBoardId(pageable,boardId);
+            Slice<CommentDTO.CommentResDTO> commentList= commentRepository.findByBoardId(pageable,boardId);
 
             String loginMemberId = authentication != null ? authentication.getName() : "";
             commentList.getContent().forEach(p -> {
@@ -149,7 +148,7 @@ public class CommentService {
             String memberId = authentication.getName();
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "commentRegisterDate"));
-            Slice<CommentDTO.commentResDTO> commentList = commentRepository.findByMember_MemberId(memberId,pageRequest).map(CommentDTO.commentResDTO :: new);
+            Slice<CommentDTO.CommentResDTO> commentList = commentRepository.findByMember_MemberId(memberId,pageRequest).map(CommentDTO.CommentResDTO:: new);
 
             if(commentList.isEmpty()){
                 return response.success(commentList,"작성한 댓글이 없습니다.");

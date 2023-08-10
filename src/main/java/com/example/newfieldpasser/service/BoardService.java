@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -55,7 +54,7 @@ public class BoardService {
     게시글 등록
      */
     @Transactional
-    public ResponseEntity<?> registerBoard(MultipartFile file, Authentication authentication, BoardDTO.boardReqDTO boardReqDTO) {
+    public ResponseEntity<?> registerBoard(MultipartFile file, Authentication authentication, BoardDTO.BoardReqDTO boardReqDTO) {
         try {
             String imageUrl = null;
             if (file != null && !file.isEmpty()) {
@@ -110,7 +109,7 @@ public class BoardService {
      */
     public ResponseEntity<?> boardInquiryDetail(long boardId, Authentication authentication) {
         try {
-            BoardDTO.boardDetailResDTO result = boardRepository.findByBoardId(boardId).map(BoardDTO.boardDetailResDTO::new).get();
+            BoardDTO.BoardDetailResDTO result = boardRepository.findByBoardId(boardId).map(BoardDTO.BoardDetailResDTO::new).get();
 
             String loginMemberId = authentication != null ? authentication.getName() : "";
 
@@ -135,7 +134,7 @@ public class BoardService {
     게시글 수정
      */
     @Transactional
-    public ResponseEntity<?> editBoard(long boardId, MultipartFile file, BoardDTO.boardEditReqDTO boardEditReqDTO) {
+    public ResponseEntity<?> editBoard(long boardId, MultipartFile file, BoardDTO.BoardEditReqDTO boardEditReqDTO) {
         try {
 
             Board board = boardRepository.findByBoardId(boardId).get();
@@ -213,8 +212,8 @@ public class BoardService {
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findDefaultAll(pageRequest).map(BoardDTO.boardResDTO::new);
+            Slice<BoardDTO.BoardResDTO> boardList =
+                    boardRepository.findDefaultAll(pageRequest).map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -232,8 +231,8 @@ public class BoardService {
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findByCategory_CategoryId(categoryId, pageRequest).map(BoardDTO.boardResDTO::new);
+            Slice<BoardDTO.BoardResDTO> boardList =
+                    boardRepository.findByCategory_CategoryId(categoryId, pageRequest).map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -252,8 +251,8 @@ public class BoardService {
             List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
-                    boardRepository.findByDistricts(districtIds, pageRequest).map(BoardDTO.boardResDTO::new);
+            Slice<BoardDTO.BoardResDTO> boardList =
+                    boardRepository.findByDistricts(districtIds, pageRequest).map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -272,9 +271,9 @@ public class BoardService {
             List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository.findByCategoryAndDistricts(categoryId, districtIds, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -292,9 +291,9 @@ public class BoardService {
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository.findByTitleContaining(title, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -312,9 +311,9 @@ public class BoardService {
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository.findByTitleContainingAndCategory_CategoryId(title, categoryId, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -333,9 +332,9 @@ public class BoardService {
             List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository.findByTitleAndDistricts(title, districtIds, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -354,9 +353,9 @@ public class BoardService {
             List<Integer> districtIds = districtReqDTO.getDistrictIds();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository.findByTitleAndCategoryAndDistricts(title, categoryId, districtIds, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -377,10 +376,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDateAndTitleAndCategoryAndDistricts(title, categoryId, districtIds, start, end, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -400,10 +399,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDateAndTitleAndCategory(title, categoryId, start, end, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -424,10 +423,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDateAndTitleAndDistricts(title, districtIds, start, end, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -446,10 +445,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDateAndTitle(title, start, end, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -468,10 +467,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDate(start, end, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -490,10 +489,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDateAndCategory(start, end, categoryId, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -513,10 +512,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDateAndDistrict(start, end, districtIds, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -537,10 +536,10 @@ public class BoardService {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findByDateAndCategoryAndDistrict(start, end, categoryId, districtIds, pageRequest)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -557,10 +556,10 @@ public class BoardService {
             LocalDateTime startTime = LocalDateTime.parse(start);
             LocalDateTime endTime = LocalDateTime.parse(end);
 
-            Slice<BoardDTO.boardResDTO> boardList =
+            Slice<BoardDTO.BoardResDTO> boardList =
                     boardRepository
                             .findBySearchOption(pageable, title, categoryName, districtNames, startTime, endTime)
-                            .map(BoardDTO.boardResDTO::new);
+                            .map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Board Inquiry Success!");
 
@@ -597,7 +596,7 @@ public class BoardService {
     public ResponseEntity<?> blindBoardLookup(int page) {
         try {
             PageRequest pageRequest = PageRequest.of(page - 1, 10);
-            Slice<BoardDTO.boardResDTO> boardList = boardRepository.findBlindBoardNative(pageRequest).map(BoardDTO.boardResDTO::new);
+            Slice<BoardDTO.BoardResDTO> boardList = boardRepository.findBlindBoardNative(pageRequest).map(BoardDTO.BoardResDTO::new);
 
             return response.success(boardList, "Blind Board Lookup Success!");
 

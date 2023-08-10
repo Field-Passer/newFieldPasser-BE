@@ -4,9 +4,7 @@ import com.example.newfieldpasser.dto.AuthDTO;
 import com.example.newfieldpasser.dto.BoardDTO;
 import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.dto.Response;
-import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Member;
-import com.example.newfieldpasser.exception.board.BoardException;
 import com.example.newfieldpasser.exception.member.ErrorCode;
 import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.jwt.JwtTokenProvider;
@@ -15,7 +13,6 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.cache.spi.entry.StructuredCacheEntry;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -27,9 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -360,7 +355,7 @@ public class MemberService {
             String memberId = authentication.getName();
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
-                Slice<BoardDTO.boardResDTO> myBoardList = boardRepository.findByMember_MemberId(memberId,pageRequest).map(BoardDTO.boardResDTO::new);
+                Slice<BoardDTO.BoardResDTO> myBoardList = boardRepository.findByMember_MemberId(memberId,pageRequest).map(BoardDTO.BoardResDTO::new);
 
 
                 if (myBoardList.isEmpty()){

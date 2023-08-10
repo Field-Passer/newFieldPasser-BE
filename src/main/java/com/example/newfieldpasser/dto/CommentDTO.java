@@ -4,7 +4,6 @@ import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Comment;
 import com.example.newfieldpasser.entity.Member;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class CommentDTO {
     @Getter
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class commentReqDTO{
+    public static class CommentReqDTO {
         private String commentContent;
         private long boardId;
         private Long parentId;
@@ -32,7 +31,7 @@ public class CommentDTO {
     @Getter
     @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class commentResDTO{
+    public static class CommentResDTO {
         private long commentId;
         private String memberId;
 
@@ -44,10 +43,10 @@ public class CommentDTO {
         private LocalDateTime commentRegisterDate;
         private LocalDateTime commentUpDate;
         private boolean myComment;
-        private List<commentResDTO> children = new ArrayList<>();
+        private List<CommentResDTO> children = new ArrayList<>();
 
         @Builder
-        public commentResDTO(Comment comment){
+        public CommentResDTO(Comment comment){
             this.commentId = comment.getCommentId();
             this.memberId = comment.getMember().getMemberId();
             this.memberNickname = comment.getMember().getMemberNickName();
@@ -67,7 +66,7 @@ public class CommentDTO {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class commentUpdateDTO{
+    public static class CommentUpdateDTO {
         private String commentContent;
 
     }

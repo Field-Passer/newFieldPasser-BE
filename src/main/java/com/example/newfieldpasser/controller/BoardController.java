@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class BoardController {
     @PostMapping("/board/register")
     public ResponseEntity<?> registerBoard(@RequestParam(value = "file", required = false) MultipartFile file,
                                            Authentication authentication,
-                                           BoardDTO.boardReqDTO boardReqDTO) {
+                                           BoardDTO.BoardReqDTO boardReqDTO) {
 
         return boardService.registerBoard(file, authentication, boardReqDTO);
     }
@@ -47,7 +46,7 @@ public class BoardController {
     @PutMapping("/board/edit/{boardId}")
     public ResponseEntity<?> editBoard(@PathVariable long boardId,
                                        @RequestParam(value = "file", required = false) MultipartFile file,
-                                       BoardDTO.boardEditReqDTO boardEditReqDTO) {
+                                       BoardDTO.BoardEditReqDTO boardEditReqDTO) {
 
         return boardService.editBoard(boardId,file,boardEditReqDTO);
     }

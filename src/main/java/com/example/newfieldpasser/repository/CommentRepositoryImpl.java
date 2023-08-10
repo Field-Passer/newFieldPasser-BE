@@ -1,7 +1,6 @@
 package com.example.newfieldpasser.repository;
 
 import com.example.newfieldpasser.dto.CommentDTO;
-import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.entity.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -22,17 +21,17 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
 
 
     @Override
-    public Slice<CommentDTO.commentResDTO> findByBoardId(Pageable pageable,long boardId ) {
-        List<Comment> parentComments = queryFactory.selectFrom(comment)
-                .leftJoin(comment.parent).fetchJoin()
+    public Slice<CommentDTO.CommentResDTO> findByBoardId(Pageable pageable, long boardId ) {
+        List<Comment> parentComments =
+                queryFactory.selectFrom(comment)
                 .where(comment.board.boardId.eq(boardId), comment.parent.isNull())
                 .orderBy(comment.parent.commentId.asc().nullsFirst(), comment.commentRegisterDate.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        List<Comment> childrenComments = queryFactory.selectFrom(comment)
-                .leftJoin(comment.parent).fetchJoin()
+        List<Comment> childrenComments =
+                queryFactory.selectFrom(comment)
                 .where(comment.board.boardId.eq(boardId), comment.parent.isNotNull())
                 .orderBy(comment.parent.commentId.asc().nullsFirst(), comment.commentRegisterDate.asc())
                 .fetch();
@@ -43,12 +42,12 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
             hasNext = true;
         }
 
-        List<CommentDTO.commentResDTO> commentList = new ArrayList<>();
+        List<CommentDTO.CommentResDTO> commentList = new ArrayList<>();
 
         parentComments.forEach(p -> {
-            CommentDTO.commentResDTO parentResDTO = new CommentDTO.commentResDTO(p);
+            CommentDTO.CommentResDTO parentResDTO = new CommentDTO.CommentResDTO(p);
             childrenComments.forEach(c -> {
-                CommentDTO.commentResDTO childrenResDTO = new CommentDTO.commentResDTO(c);
+                CommentDTO.CommentResDTO childrenResDTO = new CommentDTO.CommentResDTO(c);
                 if (c.getParent().getCommentId() == p.getCommentId()) {
                     parentResDTO.getChildren().add(childrenResDTO);
                 }
