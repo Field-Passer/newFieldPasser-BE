@@ -15,6 +15,7 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -121,9 +122,8 @@ public class CommentService {
      */
     public ResponseEntity<?> commentListInquiryByBoard(long boardId ,int page, Authentication authentication){
         try{
-            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.ASC, "commentRegisterDate"));
-            Slice<CommentDTO.commentResDTO> commentList= commentRepository
-                    .findByBoardId(pageRequest,boardId);
+            Pageable pageable = PageRequest.of(page - 1, 10);
+            Slice<CommentDTO.commentResDTO> commentList= commentRepository.findByBoardId(pageable,boardId);
 
             String loginMemberId = authentication != null ? authentication.getName() : "";
             commentList.getContent().forEach(p -> {
