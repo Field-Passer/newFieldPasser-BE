@@ -3,6 +3,7 @@ package com.example.newfieldpasser.repository;
 import com.example.newfieldpasser.dto.CommentDTO;
 import com.example.newfieldpasser.entity.Comment;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -26,8 +27,6 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
                 queryFactory.selectFrom(comment)
                 .where(comment.board.boardId.eq(boardId), comment.parent.isNull())
                 .orderBy(comment.parent.commentId.asc().nullsFirst(), comment.commentRegisterDate.asc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         List<Comment> childrenComments =
@@ -36,11 +35,6 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
                 .orderBy(comment.parent.commentId.asc().nullsFirst(), comment.commentRegisterDate.asc())
                 .fetch();
 
-        boolean hasNext = false;
-        if(parentComments.size() > pageable.getPageSize()){
-            parentComments.remove(pageable.getPageSize());
-            hasNext = true;
-        }
 
         List<CommentDTO.CommentResDTO> commentList = new ArrayList<>();
 
@@ -56,7 +50,10 @@ public class CommentRepositoryImpl extends QuerydslRepositorySupport implements 
             commentList.add(parentResDTO);
         });
 
-        return new SliceImpl<>(commentList,pageable,hasNext);
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), commentList.size());
+
+        return new PageImpl<>(commentList.subList(start,end),pageable,parentComments.size());
     }
 
     @Override
