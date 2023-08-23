@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.newfieldpasser.dto.BoardDTO;
 import com.example.newfieldpasser.dto.DistrictDTO;
+import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Category;
@@ -11,6 +12,7 @@ import com.example.newfieldpasser.entity.District;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.board.BoardException;
 import com.example.newfieldpasser.exception.board.ErrorCode;
+import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -605,6 +607,24 @@ public class BoardService {
             throw new BoardException(ErrorCode.BOARD_LIST_INQUIRY_FAIL);
         }
     }
+
+    /*
+    회원 닉네임 누르면 회원 정보 표시
+     */
+    public ResponseEntity<?> boardByMemberInquiry(String MemberNickName){
+        try{
+            Member member = memberRepository.findByMemberNickname(MemberNickName).get();
+
+            MypageDTO.MemberInfo memberInfo = new MypageDTO.MemberInfo(member);
+            return response.success(memberInfo,"Success Member Info");
+
+        }catch(MemberException e){
+            throw new MemberException(com.example.newfieldpasser.exception.member.ErrorCode.SELECT_MEMBER_LIST);
+        }
+
+    }
+
+
 
     /*
     10분마다 양도시간이 지난 게시글들을 확인하여 블라인드 처리함
