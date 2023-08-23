@@ -118,4 +118,8 @@ public class Board {
     public void blindBoard() {
         this.blind = !this.blind;
     }
+
+    public void soldOut() {
+        this.transactionStatus = TransactionStatus.판매완료;
+    }
 }

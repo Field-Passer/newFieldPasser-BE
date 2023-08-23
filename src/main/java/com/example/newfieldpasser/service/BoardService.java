@@ -607,6 +607,25 @@ public class BoardService {
     }
 
     /*
+    게시글 판매완료로 변경
+     */
+    @Transactional
+    public ResponseEntity<?> changeSoldOut(long boardId) {
+        try {
+
+            Board findBoard = boardRepository.findByBoardId(boardId).get();
+            findBoard.soldOut();
+
+            return response.success("Edit Board Success!");
+
+        } catch (BoardException e) {
+            e.printStackTrace();
+            log.error("게시글 수정 실패!");
+            throw new BoardException(ErrorCode.BOARD_EDIT_FAIL);
+        }
+    }
+
+    /*
     10분마다 양도시간이 지난 게시글들을 확인하여 블라인드 처리함
      */
     @Transactional
