@@ -262,7 +262,7 @@ public class BoardController {
       /*
     회원 닉네임 누르면 회원 정보 표시
      */
-    @GetMapping("/search/{memberNickName}")
+    @GetMapping("/member-inquiry/{memberNickName}")
     public ResponseEntity<?> boardByMemberInquiry(@PathVariable String memberNickName){
         return boardService.boardByMemberInquiry(memberNickName);
     }

@@ -613,7 +613,7 @@ public class BoardService {
      */
     public ResponseEntity<?> boardByMemberInquiry(String MemberNickName){
         try{
-            Member member = memberRepository.findByMemberNickname(MemberNickName).get();
+            Member member = memberRepository.findByMemberNickName(MemberNickName).get();
 
             MypageDTO.MemberInfo memberInfo = new MypageDTO.MemberInfo(member);
             return response.success(memberInfo,"Success Member Info");
