@@ -259,4 +259,9 @@ public class BoardController {
         return boardService.searchBoard(title, categoryName, startTime,endTime, districtNames, page);
     }
 
+    @PutMapping("/board/sold-out/{boardId}")
+    public ResponseEntity<?> changeSoldOut(@PathVariable long boardId) {
+        return boardService.changeSoldOut(boardId);
+    }
+
 }
