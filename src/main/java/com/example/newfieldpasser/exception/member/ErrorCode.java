@@ -18,6 +18,7 @@ public enum ErrorCode {
     BOARD_LIST_FAIL(HttpStatus.BAD_REQUEST,"Board List failed"),
 
     BOARD_LIST_NOT_EXIST(HttpStatus.BAD_REQUEST,"Board List NOT EXIST"),
+    SELECT_MEMBER_LIST(HttpStatus.BAD_REQUEST,"Select Member List failed"),
 
     ALREADY_EXIST(HttpStatus.CONFLICT, "Already Registered Email");
 

@@ -259,9 +259,19 @@ public class BoardController {
         return boardService.searchBoard(title, categoryName, startTime,endTime, districtNames, page);
     }
 
+
     @PutMapping("/board/sold-out/{boardId}")
     public ResponseEntity<?> changeSoldOut(@PathVariable long boardId) {
         return boardService.changeSoldOut(boardId);
+    }
+
+
+      /*
+    회원 닉네임 누르면 회원 정보 표시
+     */
+    @GetMapping("/member-inquiry/{boardId}/{page}")
+    public ResponseEntity<?> boardByMemberInquiry(@PathVariable long boardId , @PathVariable int page){
+        return boardService.boardByMemberInquiry(boardId,page);
     }
 
 }
