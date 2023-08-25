@@ -30,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -611,12 +612,16 @@ public class BoardService {
     /*
     회원 닉네임 누르면 회원 정보 표시
      */
-    public ResponseEntity<?> boardByMemberInquiry(String MemberNickName){
+    public ResponseEntity<?> boardByMemberInquiry(long boardId,int page){
         try{
-            Member member = memberRepository.findByMemberNickName(MemberNickName).get();
+            Board board = boardRepository.findByBoardId(boardId).get();
 
-            MypageDTO.MemberInfo memberInfo = new MypageDTO.MemberInfo(member);
-            return response.success(memberInfo,"Success Member Info");
+
+            PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
+            Slice<MypageDTO.BoardAndMemberDTO> myBoardList = boardRepository.findByMember_MemberId(board.getMember().getMemberId(),pageRequest)
+                    .map(MypageDTO.BoardAndMemberDTO::new);
+
+            return response.success(myBoardList,"Success Member Info");
 
         }catch(MemberException e){
             throw new MemberException(com.example.newfieldpasser.exception.member.ErrorCode.SELECT_MEMBER_LIST);
