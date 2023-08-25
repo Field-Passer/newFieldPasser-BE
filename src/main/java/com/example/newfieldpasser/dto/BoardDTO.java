@@ -176,5 +176,5 @@ public class BoardDTO {
         }
     }
 
-    
+
 }
