@@ -53,6 +53,10 @@ public class CommentController {
     /*
      내가 단 댓글 조회
      */
+    @GetMapping("/select/memberInquiry/{memberNickName}")
+    public ResponseEntity<?> commentByMemberInquiry(@PathVariable String memberNickName){
+        return commentService.commentByMemberInquiry(memberNickName);
+    }
 
 
 
