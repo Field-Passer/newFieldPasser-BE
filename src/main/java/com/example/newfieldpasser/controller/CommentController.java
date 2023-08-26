@@ -51,7 +51,7 @@ public class CommentController {
 
 
     /*
-     내가 단 댓글 조회
+       회원 닉네임 누르면 회원 정보 조회
      */
     @GetMapping("/select/memberInquiry/{memberNickName}")
     public ResponseEntity<?> commentByMemberInquiry(@PathVariable String memberNickName){
@@ -59,7 +59,9 @@ public class CommentController {
     }
 
 
-
+    /*
+     내가 단 댓글 조회
+     */
     @GetMapping("/comment/my-inquiry/{page}")
     public ResponseEntity<?> commentListMember(Authentication authentication, @PathVariable int page){
         return commentService.commentListMember(authentication,page);
