@@ -1,11 +1,15 @@
 package com.example.newfieldpasser.dto;
 
+import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.parameter.Role;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MypageDTO {
 
@@ -54,6 +58,32 @@ public class MypageDTO {
 
         public updatePassword(Member member){
             this.password=member.getPassword();
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class BoardAndMemberDTO{
+        private String memberId;
+        private String memberName;
+        private String memberNickName;
+        private String memberPhone;
+        private String role;
+        private String title;
+        private long boardId;
+
+
+        public BoardAndMemberDTO( Board board){
+            this.memberId = board.getMember().getMemberId();
+            this.memberName = board.getMember().getMemberName();
+            this.memberNickName = board.getMember().getMemberNickName();
+            this.memberPhone = board.getMember().getMemberPhone();
+            this.role = board.getMember().getRole().getTitle();
+            this.title = board.getTitle();
+            this.boardId = board.getBoardId();
+
+
+
         }
     }
 }
