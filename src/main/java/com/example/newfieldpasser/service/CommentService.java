@@ -2,12 +2,14 @@ package com.example.newfieldpasser.service;
 
 import com.amazonaws.services.kms.model.NotFoundException;
 import com.example.newfieldpasser.dto.CommentDTO;
+import com.example.newfieldpasser.dto.MypageDTO;
 import com.example.newfieldpasser.dto.Response;
 import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Comment;
 import com.example.newfieldpasser.entity.Member;
 import com.example.newfieldpasser.exception.comment.CommentException;
 import com.example.newfieldpasser.exception.comment.ErrorCode;
+import com.example.newfieldpasser.exception.member.MemberException;
 import com.example.newfieldpasser.repository.BoardRepository;
 import com.example.newfieldpasser.repository.CommentRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
@@ -162,6 +164,22 @@ public class CommentService {
         }
     }
 
+    /*
+    댓글작성자 닉네임 누르면 작성자의 정보 조회
+     */
+    public ResponseEntity<?> commentByMemberInquiry(String memberNickName){
+        try{
+            Member member = memberRepository.findByMemberNickName(memberNickName).get();
+
+            MypageDTO.MemberInfo memberInfo = new MypageDTO.MemberInfo(member);
+
+            return response.success(memberInfo,"회원정보 조회 성공");
+        }catch (CommentException e) {
+            e.printStackTrace();
+            throw new CommentException(ErrorCode.MEMBER_SELECT_FAIL);
+
+        }
+    }
 
 
 
