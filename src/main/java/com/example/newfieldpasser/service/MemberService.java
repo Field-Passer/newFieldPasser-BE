@@ -13,6 +13,7 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.vo.MailVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -349,13 +350,13 @@ public class MemberService {
      /*
     내가 작성한 글 조회
      */
-    public ResponseEntity<?> selectMyPost(Authentication authentication,int page){
+    public ResponseEntity<?> selectMyPost(Authentication authentication, int page){
         try{
 
             String memberId = authentication.getName();
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
-                Slice<BoardDTO.BoardResDTO> myBoardList = boardRepository.findByMember_MemberId(memberId,pageRequest).map(BoardDTO.BoardResDTO::new);
+            Page<BoardDTO.BoardResDTO> myBoardList = boardRepository.findPageByMember_MemberId(memberId,pageRequest).map(BoardDTO.BoardResDTO::new);
 
 
                 if (myBoardList.isEmpty()){

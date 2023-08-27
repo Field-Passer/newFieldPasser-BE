@@ -107,6 +107,6 @@ public class MemberController {
     */
     @GetMapping("/my-page/post-inquiry/{page}")
     public ResponseEntity<?> selectMyPost(Authentication authentication, @PathVariable int page){
-        return memberService.selectMyPost(authentication,page);
+        return memberService.selectMyPost(authentication, page);
     }
 }
