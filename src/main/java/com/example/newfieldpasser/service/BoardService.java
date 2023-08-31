@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -632,15 +633,12 @@ public class BoardService {
     /*
     회원 닉네임 누르면 회원 정보 표시
      */
-    public ResponseEntity<?> boardByMemberInquiry(long boardId,int page){
+    public ResponseEntity<?> boardByMemberInquiry(String memberId,int page){
         try{
-            Board board = boardRepository.findByBoardId(boardId).get();
-
+            Member member = memberRepository.findByMemberId(memberId).get();
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
-            Slice<MypageDTO.BoardAndMemberDTO> myBoardList = boardRepository.findByMember_MemberId(board.getMember().getMemberId(),pageRequest)
-                    .map(MypageDTO.BoardAndMemberDTO::new);
-
+           Slice<BoardDTO.BoardResDTO> myBoardList = boardRepository.findByMember_MemberId(member.getMemberId(),pageRequest).map(BoardDTO.BoardResDTO::new);
             return response.success(myBoardList,"Success Member Info");
 
         }catch(MemberException e){

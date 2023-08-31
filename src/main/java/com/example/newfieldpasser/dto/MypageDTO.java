@@ -73,12 +73,12 @@ public class MypageDTO {
         private long boardId;
 
 
-        public BoardAndMemberDTO( Board board){
-            this.memberId = board.getMember().getMemberId();
-            this.memberName = board.getMember().getMemberName();
-            this.memberNickName = board.getMember().getMemberNickName();
-            this.memberPhone = board.getMember().getMemberPhone();
-            this.role = board.getMember().getRole().getTitle();
+        public BoardAndMemberDTO( Board board, Member member){
+            this.memberId = member.getMemberId();
+            this.memberName = member.getMemberName();
+            this.memberNickName = member.getMemberNickName();
+            this.memberPhone = member.getMemberPhone();
+            this.role = member.getRole().getTitle();
             this.title = board.getTitle();
             this.boardId = board.getBoardId();
 

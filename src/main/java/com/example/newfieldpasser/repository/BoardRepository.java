@@ -20,6 +20,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
     @EntityGraph(attributePaths = {"member","category","district"})
     Optional<Board> findByBoardId(long boardId);
 
+
+
     @Query(value = "select * from board where board_id = :boardId", nativeQuery = true)
     Optional<Board> findByBoardIdNative(long boardId);
 
@@ -153,6 +155,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>, BoardReposi
     void minusWishCount(@Param("boardId") long boardId);
 
     Slice<Board> findByMember_MemberId(String memberId,PageRequest pageRequest);
+
+
 
     @Modifying
     @Query("update Board b set b.blind = 1 where b.startTime < :dateTime")
