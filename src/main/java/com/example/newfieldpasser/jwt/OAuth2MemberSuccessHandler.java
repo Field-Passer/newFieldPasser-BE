@@ -78,8 +78,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("https")
-                .host("field-passer.store")
+                .scheme("http")
+                .host("localhost:5173/social-redirect")
                 .queryParams(queryParams)
                 .build()
                 .toString();
