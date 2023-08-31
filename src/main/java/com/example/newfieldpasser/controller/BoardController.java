@@ -269,9 +269,9 @@ public class BoardController {
       /*
     회원 닉네임 누르면 회원 정보 표시
      */
-    @GetMapping("/member-inquiry/{boardId}/{page}")
-    public ResponseEntity<?> boardByMemberInquiry(@PathVariable long boardId , @PathVariable int page){
-        return boardService.boardByMemberInquiry(boardId,page);
+    @GetMapping("/member-inquiry/{memberId}/{page}")
+    public ResponseEntity<?> boardByMemberInquiry( @PathVariable String memberId,@PathVariable int page){
+        return boardService.boardByMemberInquiry(memberId, page);
     }
 
 }
