@@ -78,8 +78,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("http")
-                .host("localhost:5173/social-redirect")
+                .scheme("https")
+                .host("fieldpasser.netlify.app/social-redirect")
                 .queryParams(queryParams)
                 .build()
                 .toString();
