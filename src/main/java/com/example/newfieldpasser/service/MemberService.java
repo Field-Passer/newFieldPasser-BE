@@ -358,14 +358,11 @@ public class MemberService {
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate"));
             Page<BoardDTO.BoardResDTO> myBoardList = boardRepository.findPageByMember_MemberId(memberId,pageRequest).map(BoardDTO.BoardResDTO::new);
 
-
-                if (myBoardList.isEmpty()){
-                    return response.success(myBoardList,"내가 작성한 글이 없습니다");
-
-                }else{
-
-                    return response.success(myBoardList,"관심글 조회 성공");
-                }
+            if (myBoardList.isEmpty()){
+                return response.success(myBoardList,"내가 작성한 글이 없습니다");
+            } else{
+                return response.success(myBoardList,"내가 작성한 글 조회 성공");
+            }
 
         }catch(MemberException e){
             e.printStackTrace();

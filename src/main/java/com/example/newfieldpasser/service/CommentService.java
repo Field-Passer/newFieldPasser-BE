@@ -15,10 +15,7 @@ import com.example.newfieldpasser.repository.CommentRepository;
 import com.example.newfieldpasser.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -143,14 +140,12 @@ public class CommentService {
     /*
     내 댓글 조회 - 멤버별
     */
-
-
     public ResponseEntity<?> commentListMember(Authentication authentication, int page){
         try{
             String memberId = authentication.getName();
 
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "commentRegisterDate"));
-            Slice<CommentDTO.CommentResDTO> commentList = commentRepository.findByMember_MemberId(memberId,pageRequest).map(CommentDTO.CommentResDTO:: new);
+            Page<CommentDTO.CommentResDTO> commentList = commentRepository.findPageByMember_MemberId(memberId,pageRequest).map(CommentDTO.CommentResDTO:: new);
 
             if(commentList.isEmpty()){
                 return response.success(commentList,"작성한 댓글이 없습니다.");
