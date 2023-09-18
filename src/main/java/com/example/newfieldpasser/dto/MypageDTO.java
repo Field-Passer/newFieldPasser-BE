@@ -18,6 +18,7 @@ public class MypageDTO {
     public static class MemberInfo{
         private String memberId;
         private String memberName;
+        private Role memberRole;
         private String memberNickName;
         private String memberPhone;
         private String role;
@@ -25,6 +26,7 @@ public class MypageDTO {
         public MemberInfo(Member member){
             this.memberId = member.getMemberId();
             this.memberName = member.getMemberName();
+            this.memberRole = member.getRole();
             this.memberNickName = member.getMemberNickName();
             this.memberPhone = member.getMemberPhone();
             this.role = member.getRole().getTitle();

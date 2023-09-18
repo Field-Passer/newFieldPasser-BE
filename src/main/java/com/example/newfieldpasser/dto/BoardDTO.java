@@ -4,6 +4,7 @@ import com.example.newfieldpasser.entity.Board;
 import com.example.newfieldpasser.entity.Category;
 import com.example.newfieldpasser.entity.District;
 import com.example.newfieldpasser.entity.Member;
+import com.example.newfieldpasser.parameter.Role;
 import com.example.newfieldpasser.parameter.TransactionStatus;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -84,6 +85,7 @@ public class BoardDTO {
         private String memberId;
         private String memberName;
         private String memberNickName;
+        private Role memberRole;
         private String categoryName;
         private String districtName;
         private String title;
@@ -106,6 +108,7 @@ public class BoardDTO {
             this.memberId = board.getMember().getMemberId();
             this.memberName = board.getMember().getMemberName();
             this.memberNickName = board.getMember().getMemberNickName();
+            this.memberRole = board.getMember().getRole();
             this.categoryName = board.getCategory().getCategoryName();
             this.districtName = board.getDistrict().getDistrictName();
             this.title = board.getTitle();
@@ -134,6 +137,7 @@ public class BoardDTO {
         private String memberNickName;
         private String categoryName;
         private String districtName;
+
         private String title;
         private String content;
         private LocalDateTime registerDate;
