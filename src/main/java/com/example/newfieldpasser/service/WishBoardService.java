@@ -11,6 +11,7 @@ import com.example.newfieldpasser.repository.MemberRepository;
 import com.example.newfieldpasser.repository.WishBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -64,7 +65,7 @@ public class WishBoardService {
         try {
             String memberId = authentication.getName();
             PageRequest pageRequest = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "registerDate")); // 관심 글 등록한 날짜 기준
-            Slice<WishBoardDTO.WishBoardResDTO> result = wishBoardRepository.findByMemberId(memberId, pageRequest).map(WishBoardDTO.WishBoardResDTO::new);
+            Page<WishBoardDTO.WishBoardResDTO> result = wishBoardRepository.findPageByMember_MemberId(memberId, pageRequest).map(WishBoardDTO.WishBoardResDTO::new);
 
             return response.success(result, "WishList Inquiry Success!");
         } catch (BoardException e) {
